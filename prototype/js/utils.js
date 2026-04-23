@@ -8,7 +8,7 @@ function useUtils() {
   // ---- Mock Data Loader ----
   async function loadJSON(filename) {
     try {
-      const res = await fetch('../mock/' + filename);
+      const res = await fetch('./mock/' + filename);
       if (!res.ok) {
         console.warn('Failed to fetch ' + filename + ': ' + res.status);
         return null;
