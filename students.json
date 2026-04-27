@@ -1,0 +1,91 @@
+{
+  "result": false,
+  "data": [
+    {
+      "id": 10001,
+      "code": "10215301001",
+      "name": "张三",
+      "nameZh": "张三",
+      "nameEn": "Zhang San",
+      "grade": "2024",
+      "cultivateType": {
+        "id": 1,
+        "nameZh": "主修",
+        "nameEn": "Major"
+      },
+      "department": {
+        "id": 101,
+        "nameZh": "计算机科学与技术学院",
+        "nameEn": "School of Computer Science and Technology"
+      },
+      "major": {
+        "id": 201,
+        "nameZh": "计算机科学与技术",
+        "nameEn": "Computer Science and Technology"
+      },
+      "majorDirection": {
+        "id": 301,
+        "nameZh": "人工智能方向",
+        "nameEn": "Artificial Intelligence"
+      },
+      "education": {
+        "id": 1,
+        "nameZh": "本科",
+        "nameEn": "Undergraduate"
+      },
+      "stdType": {
+        "id": 1,
+        "nameZh": "普通学生",
+        "nameEn": "Regular Student"
+      },
+      "stdStatus": {
+        "id": 1,
+        "nameZh": "在读",
+        "nameEn": "Active"
+      }
+    },
+    {
+      "id": 10002,
+      "code": "10215302001",
+      "name": "李四",
+      "nameZh": "李四",
+      "nameEn": "Li Si",
+      "grade": "2024",
+      "cultivateType": {
+        "id": 1,
+        "nameZh": "主修",
+        "nameEn": "Major"
+      },
+      "department": {
+        "id": 101,
+        "nameZh": "计算机科学与技术学院",
+        "nameEn": "School of Computer Science and Technology"
+      },
+      "major": {
+        "id": 202,
+        "nameZh": "软件工程",
+        "nameEn": "Software Engineering"
+      },
+      "majorDirection": {
+        "id": 302,
+        "nameZh": "系统软件方向",
+        "nameEn": "System Software"
+      },
+      "education": {
+        "id": 2,
+        "nameZh": "硕士研究生",
+        "nameEn": "Master"
+      },
+      "stdType": {
+        "id": 1,
+        "nameZh": "普通学生",
+        "nameEn": "Regular Student"
+      },
+      "stdStatus": {
+        "id": 1,
+        "nameZh": "在读",
+        "nameEn": "Active"
+      }
+    }
+  ]
+}

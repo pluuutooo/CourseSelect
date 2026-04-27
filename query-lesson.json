@@ -1,0 +1,398 @@
+{
+  "result": false,
+  "data": {
+    "pageInfo": {
+      "totalPages": 3,
+      "totalRows": 28,
+      "pageSize": 10,
+      "pageNo": 1
+    },
+    "lessons": [
+      {
+        "id": 3001,
+        "code": "CS301.01",
+        "name": { "nameZh": "操作系统-01班", "nameEn": "Operating Systems-01" },
+        "course": {
+          "id": 2003, "code": "CS301",
+          "nameZh": "操作系统", "nameEn": "Operating Systems",
+          "credits": 4, "isSubstituteCourse": false, "isSubstituteRetakeCourse": false
+        },
+        "teachers": [{ "id": 901, "nameZh": "王教授", "nameEn": "Prof. Wang" }],
+        "dateTimePlace": {
+          "textZh": "星期一 3-4节 教学楼A302\n星期三 1-2节 教学楼A302",
+          "textEn": "Mon 3-4 Building A302\nWed 1-2 Building A302"
+        },
+        "campus": { "id": 1, "nameZh": "闵行校区", "nameEn": "Minhang Campus" },
+        "department": { "id": 101, "nameZh": "计算机科学与技术学院", "nameEn": "School of CS" },
+        "limitCount": 120, "stdCount": 87,
+        "preStdCount": 0, "amLimitCount": null, "amStdCount": 0, "preAmStdCount": 0,
+        "isOpenCross": false, "acrossMajorEnable": false, "acrossMajorLimitCount": null,
+        "selectedLesson": null, "pinned": false, "retake": false, "canRetake": false,
+        "canSubsitute": false, "subsituteRetak": false, "coursePackAssoc": null, "virtualCost": null,
+        "hasTs": true, "hasCs": false, "notInTurn": false,
+        "compulsory": true,
+        "courseProperty": "majorCompulsory",
+        "scheduleRemark": null,
+        "schedules": [
+          { "weekday": 1, "startTime": 3, "entTime": 4, "lessonId": 3001 },
+          { "weekday": 3, "startTime": 1, "entTime": 2, "lessonId": 3001 }
+        ]
+      },
+      {
+        "id": 3002,
+        "code": "CS301.02",
+        "name": { "nameZh": "操作系统-02班", "nameEn": "Operating Systems-02" },
+        "course": {
+          "id": 2003, "code": "CS301",
+          "nameZh": "操作系统", "nameEn": "Operating Systems",
+          "credits": 4, "isSubstituteCourse": false, "isSubstituteRetakeCourse": false
+        },
+        "teachers": [{ "id": 902, "nameZh": "李教授", "nameEn": "Prof. Li" }],
+        "dateTimePlace": {
+          "textZh": "星期二 5-6节 教学楼B201\n星期四 3-4节 教学楼B201",
+          "textEn": "Tue 5-6 Building B201\nThu 3-4 Building B201"
+        },
+        "campus": { "id": 1, "nameZh": "闵行校区", "nameEn": "Minhang Campus" },
+        "department": { "id": 101, "nameZh": "计算机科学与技术学院", "nameEn": "School of CS" },
+        "limitCount": 100, "stdCount": 100,
+        "preStdCount": 0, "amLimitCount": null, "amStdCount": 0, "preAmStdCount": 0,
+        "isOpenCross": false, "acrossMajorEnable": false, "acrossMajorLimitCount": null,
+        "selectedLesson": null, "pinned": false, "retake": false, "canRetake": false,
+        "canSubsitute": false, "subsituteRetak": false, "coursePackAssoc": null, "virtualCost": null,
+        "hasTs": false, "hasCs": true, "notInTurn": false,
+        "compulsory": true,
+        "courseProperty": "majorCompulsory",
+        "scheduleRemark": null,
+        "schedules": [
+          { "weekday": 2, "startTime": 5, "entTime": 6, "lessonId": 3002 },
+          { "weekday": 4, "startTime": 3, "entTime": 4, "lessonId": 3002 }
+        ]
+      },
+      {
+        "id": 3003,
+        "code": "CS302.01",
+        "name": { "nameZh": "计算机网络-01班", "nameEn": "Computer Networks-01" },
+        "course": {
+          "id": 2004, "code": "CS302",
+          "nameZh": "计算机网络", "nameEn": "Computer Networks",
+          "credits": 3, "isSubstituteCourse": false, "isSubstituteRetakeCourse": false
+        },
+        "teachers": [
+          { "id": 903, "nameZh": "赵教授", "nameEn": "Prof. Zhao" },
+          { "id": 904, "nameZh": "孙副教授", "nameEn": "Assoc. Prof. Sun" }
+        ],
+        "dateTimePlace": {
+          "textZh": "星期三 3-4节 教学楼C101",
+          "textEn": "Wed 3-4 Building C101"
+        },
+        "campus": { "id": 1, "nameZh": "闵行校区", "nameEn": "Minhang Campus" },
+        "department": { "id": 101, "nameZh": "计算机科学与技术学院", "nameEn": "School of CS" },
+        "limitCount": 150, "stdCount": 42,
+        "preStdCount": 0, "amLimitCount": null, "amStdCount": 0, "preAmStdCount": 0,
+        "isOpenCross": false, "acrossMajorEnable": false, "acrossMajorLimitCount": null,
+        "selectedLesson": null, "pinned": false, "retake": false, "canRetake": false,
+        "canSubsitute": false, "subsituteRetak": false, "coursePackAssoc": null, "virtualCost": null,
+        "hasTs": true, "hasCs": true, "notInTurn": false,
+        "compulsory": true,
+        "courseProperty": "majorCompulsory",
+        "scheduleRemark": "第1-16周上课",
+        "schedules": [
+          { "weekday": 3, "startTime": 3, "entTime": 4, "lessonId": 3003 }
+        ]
+      },
+      {
+        "id": 3004,
+        "code": "CS401.01",
+        "name": { "nameZh": "人工智能导论-01班", "nameEn": "Intro to AI-01" },
+        "course": {
+          "id": 2005, "code": "CS401",
+          "nameZh": "人工智能导论", "nameEn": "Introduction to Artificial Intelligence",
+          "credits": 3, "isSubstituteCourse": false, "isSubstituteRetakeCourse": false
+        },
+        "teachers": [{ "id": 905, "nameZh": "刘教授", "nameEn": "Prof. Liu" }],
+        "dateTimePlace": {
+          "textZh": "星期五 1-2节 教学楼A201",
+          "textEn": "Fri 1-2 Building A201"
+        },
+        "campus": { "id": 1, "nameZh": "闵行校区", "nameEn": "Minhang Campus" },
+        "department": { "id": 101, "nameZh": "计算机科学与技术学院", "nameEn": "School of CS" },
+        "limitCount": 80, "stdCount": 76,
+        "preStdCount": 0, "amLimitCount": null, "amStdCount": 0, "preAmStdCount": 0,
+        "isOpenCross": false, "acrossMajorEnable": false, "acrossMajorLimitCount": null,
+        "selectedLesson": null, "pinned": false, "retake": false, "canRetake": false,
+        "canSubsitute": false, "subsituteRetak": false, "coursePackAssoc": null, "virtualCost": null,
+        "hasTs": true, "hasCs": false, "notInTurn": false,
+        "compulsory": true,
+        "courseProperty": "majorCompulsory",
+        "scheduleRemark": null,
+        "schedules": [
+          { "weekday": 5, "startTime": 1, "entTime": 2, "lessonId": 3004 }
+        ]
+      },
+      {
+        "id": 3005,
+        "code": "MATH201.01",
+        "name": { "nameZh": "概率论与数理统计-01班", "nameEn": "Probability & Statistics-01" },
+        "course": {
+          "id": 2006, "code": "MATH201",
+          "nameZh": "概率论与数理统计", "nameEn": "Probability and Mathematical Statistics",
+          "credits": 4, "isSubstituteCourse": false, "isSubstituteRetakeCourse": false
+        },
+        "teachers": [{ "id": 906, "nameZh": "陈教授", "nameEn": "Prof. Chen" }],
+        "dateTimePlace": {
+          "textZh": "星期一 1-2节 教学楼D301\n星期四 1-2节 教学楼D301",
+          "textEn": "Mon 1-2 Building D301\nThu 1-2 Building D301"
+        },
+        "campus": { "id": 1, "nameZh": "闵行校区", "nameEn": "Minhang Campus" },
+        "department": { "id": 102, "nameZh": "数学科学学院", "nameEn": "School of Math" },
+        "limitCount": 120, "stdCount": 95,
+        "preStdCount": 0, "amLimitCount": null, "amStdCount": 0, "preAmStdCount": 0,
+        "isOpenCross": false, "acrossMajorEnable": false, "acrossMajorLimitCount": null,
+        "selectedLesson": null, "pinned": false, "retake": false, "canRetake": false,
+        "canSubsitute": false, "subsituteRetak": false, "coursePackAssoc": null, "virtualCost": null,
+        "hasTs": true, "hasCs": false, "notInTurn": false,
+        "compulsory": true,
+        "courseProperty": "majorCompulsory",
+        "scheduleRemark": null,
+        "schedules": [
+          { "weekday": 1, "startTime": 1, "entTime": 2, "lessonId": 3005 },
+          { "weekday": 4, "startTime": 1, "entTime": 2, "lessonId": 3005 }
+        ]
+      },
+      {
+        "id": 3006,
+        "code": "PE201.01",
+        "name": { "nameZh": "体育(四)-羽毛球-01班", "nameEn": "PE IV Badminton-01" },
+        "course": {
+          "id": 2007, "code": "PE201",
+          "nameZh": "体育(四)", "nameEn": "Physical Education IV",
+          "credits": 1, "isSubstituteCourse": false, "isSubstituteRetakeCourse": false
+        },
+        "teachers": [{ "id": 907, "nameZh": "周老师", "nameEn": "Teacher Zhou" }],
+        "dateTimePlace": {
+          "textZh": "星期二 7-8节 体育馆",
+          "textEn": "Tue 7-8 Gymnasium"
+        },
+        "campus": { "id": 1, "nameZh": "闵行校区", "nameEn": "Minhang Campus" },
+        "department": { "id": 107, "nameZh": "体育与健康学院", "nameEn": "School of PE" },
+        "limitCount": 40, "stdCount": 40,
+        "preStdCount": 0, "amLimitCount": null, "amStdCount": 0, "preAmStdCount": 0,
+        "isOpenCross": false, "acrossMajorEnable": false, "acrossMajorLimitCount": null,
+        "selectedLesson": null, "pinned": false, "retake": false, "canRetake": false,
+        "canSubsitute": false, "subsituteRetak": false, "coursePackAssoc": null, "virtualCost": null,
+        "hasTs": false, "hasCs": false, "notInTurn": false,
+        "compulsory": true,
+        "courseProperty": "publicCompulsory",
+        "scheduleRemark": null,
+        "schedules": [
+          { "weekday": 2, "startTime": 7, "entTime": 8, "lessonId": 3006 }
+        ]
+      },
+      {
+        "id": 3007,
+        "code": "GE101.01",
+        "name": { "nameZh": "影视鉴赏-01班", "nameEn": "Film Appreciation-01" },
+        "course": {
+          "id": 2008, "code": "GE101",
+          "nameZh": "影视鉴赏", "nameEn": "Film Appreciation",
+          "credits": 2, "isSubstituteCourse": false, "isSubstituteRetakeCourse": false
+        },
+        "teachers": [{ "id": 908, "nameZh": "吴老师", "nameEn": "Teacher Wu" }],
+        "dateTimePlace": {
+          "textZh": "星期四 9-10节 教学楼E501",
+          "textEn": "Thu 9-10 Building E501"
+        },
+        "campus": { "id": 1, "nameZh": "闵行校区", "nameEn": "Minhang Campus" },
+        "department": { "id": 108, "nameZh": "传播学院", "nameEn": "School of Communication" },
+        "limitCount": 200, "stdCount": 134,
+        "preStdCount": 0, "amLimitCount": null, "amStdCount": 0, "preAmStdCount": 0,
+        "isOpenCross": false, "acrossMajorEnable": false, "acrossMajorLimitCount": null,
+        "selectedLesson": null, "pinned": false, "retake": false, "canRetake": false,
+        "canSubsitute": false, "subsituteRetak": false, "coursePackAssoc": null, "virtualCost": null,
+        "hasTs": false, "hasCs": false, "notInTurn": false,
+        "compulsory": false,
+        "courseProperty": "generalEducation",
+        "scheduleRemark": "第3-15周上课",
+        "schedules": [
+          { "weekday": 4, "startTime": 9, "entTime": 10, "lessonId": 3007 }
+        ]
+      },
+      {
+        "id": 3008,
+        "code": "MARX002.01",
+        "name": { "nameZh": "毛泽东思想和中国特色社会主义理论体系概论-01班", "nameEn": "Mao Zedong Thought-01" },
+        "course": {
+          "id": 2009, "code": "MARX002",
+          "nameZh": "毛泽东思想和中国特色社会主义理论体系概论", "nameEn": "Introduction to Mao Zedong Thought",
+          "credits": 3, "isSubstituteCourse": false, "isSubstituteRetakeCourse": false
+        },
+        "teachers": [{ "id": 909, "nameZh": "郑教授", "nameEn": "Prof. Zheng" }],
+        "dateTimePlace": {
+          "textZh": "星期五 3-5节 教学楼A101",
+          "textEn": "Fri 3-5 Building A101"
+        },
+        "campus": { "id": 1, "nameZh": "闵行校区", "nameEn": "Minhang Campus" },
+        "department": { "id": 106, "nameZh": "马克思主义学院", "nameEn": "School of Marxism" },
+        "limitCount": 180, "stdCount": 112,
+        "preStdCount": 0, "amLimitCount": null, "amStdCount": 0, "preAmStdCount": 0,
+        "isOpenCross": false, "acrossMajorEnable": false, "acrossMajorLimitCount": null,
+        "selectedLesson": null, "pinned": false, "retake": false, "canRetake": false,
+        "canSubsitute": false, "subsituteRetak": false, "coursePackAssoc": null, "virtualCost": null,
+        "hasTs": true, "hasCs": false, "notInTurn": false,
+        "compulsory": true,
+        "courseProperty": "publicCompulsory",
+        "scheduleRemark": null,
+        "schedules": [
+          { "weekday": 5, "startTime": 3, "entTime": 5, "lessonId": 3008 }
+        ]
+      },
+      {
+        "id": 3009,
+        "code": "ENG301.01",
+        "name": { "nameZh": "英语演讲-01班", "nameEn": "English Public Speaking-01" },
+        "course": {
+          "id": 2010, "code": "ENG301",
+          "nameZh": "英语演讲", "nameEn": "English Public Speaking",
+          "credits": 2, "isSubstituteCourse": false, "isSubstituteRetakeCourse": false
+        },
+        "teachers": [{ "id": 910, "nameZh": "张老师", "nameEn": "Teacher Zhang" }],
+        "dateTimePlace": {
+          "textZh": "星期二 3-4节 教学楼B305",
+          "textEn": "Tue 3-4 Building B305"
+        },
+        "campus": { "id": 1, "nameZh": "闵行校区", "nameEn": "Minhang Campus" },
+        "department": { "id": 104, "nameZh": "外语学院", "nameEn": "School of Foreign Languages" },
+        "limitCount": 60, "stdCount": 45,
+        "preStdCount": 0, "amLimitCount": null, "amStdCount": 0, "preAmStdCount": 0,
+        "isOpenCross": false, "acrossMajorEnable": false, "acrossMajorLimitCount": null,
+        "selectedLesson": null, "pinned": false, "retake": false, "canRetake": false,
+        "canSubsitute": false, "subsituteRetak": false, "coursePackAssoc": null, "virtualCost": null,
+        "hasTs": true, "hasCs": false, "notInTurn": false,
+        "compulsory": true,
+        "courseProperty": "publicCompulsory",
+        "scheduleRemark": null,
+        "schedules": [
+          { "weekday": 2, "startTime": 3, "entTime": 4, "lessonId": 3009 }
+        ]
+      },
+      {
+        "id": 3010,
+        "code": "HIST101.01",
+        "name": { "nameZh": "中国近代史纲要-01班", "nameEn": "Modern Chinese History-01" },
+        "course": {
+          "id": 2011, "code": "HIST101",
+          "nameZh": "中国近代史纲要", "nameEn": "Outline of Modern Chinese History",
+          "credits": 3, "isSubstituteCourse": false, "isSubstituteRetakeCourse": false
+        },
+        "teachers": [{ "id": 911, "nameZh": "林教授", "nameEn": "Prof. Lin" }],
+        "dateTimePlace": {
+          "textZh": "星期三 5-6节 教学楼A103\n星期五 5-6节 教学楼A103",
+          "textEn": "Wed 5-6 Building A103\nFri 5-6 Building A103"
+        },
+        "campus": { "id": 1, "nameZh": "闵行校区", "nameEn": "Minhang Campus" },
+        "department": { "id": 106, "nameZh": "马克思主义学院", "nameEn": "School of Marxism" },
+        "limitCount": 160, "stdCount": 98,
+        "preStdCount": 0, "amLimitCount": null, "amStdCount": 0, "preAmStdCount": 0,
+        "isOpenCross": false, "acrossMajorEnable": false, "acrossMajorLimitCount": null,
+        "selectedLesson": null, "pinned": false, "retake": false, "canRetake": false,
+        "canSubsitute": false, "subsituteRetak": false, "coursePackAssoc": null, "virtualCost": null,
+        "hasTs": true, "hasCs": false, "notInTurn": false,
+        "compulsory": true,
+        "courseProperty": "publicCompulsory",
+        "scheduleRemark": "第1-16周上课",
+        "schedules": [
+          { "weekday": 3, "startTime": 5, "entTime": 6, "lessonId": 3010 },
+          { "weekday": 5, "startTime": 5, "entTime": 6, "lessonId": 3010 }
+        ]
+      },
+      {
+        "id": 3011,
+        "code": "GE201.01",
+        "name": { "nameZh": "《量子思维》导读-01班", "nameEn": "Quantum Thinking Guide-01" },
+        "course": {
+          "id": 2012, "code": "GE201",
+          "nameZh": "《量子思维》导读", "nameEn": "A Guide to Quantum Thinking",
+          "credits": 2, "isSubstituteCourse": false, "isSubstituteRetakeCourse": false
+        },
+        "teachers": [{ "id": 912, "nameZh": "钱教授", "nameEn": "Prof. Qian" }],
+        "dateTimePlace": {
+          "textZh": "星期四 7-8节 教学楼D205",
+          "textEn": "Thu 7-8 Building D205"
+        },
+        "campus": { "id": 1, "nameZh": "闵行校区", "nameEn": "Minhang Campus" },
+        "department": { "id": 103, "nameZh": "物理与电子科学学院", "nameEn": "School of Physics" },
+        "limitCount": 120, "stdCount": 67,
+        "preStdCount": 0, "amLimitCount": null, "amStdCount": 0, "preAmStdCount": 0,
+        "isOpenCross": false, "acrossMajorEnable": false, "acrossMajorLimitCount": null,
+        "selectedLesson": null, "pinned": false, "retake": false, "canRetake": false,
+        "canSubsitute": false, "subsituteRetak": false, "coursePackAssoc": null, "virtualCost": null,
+        "hasTs": true, "hasCs": false, "notInTurn": false,
+        "compulsory": false,
+        "courseProperty": "generalEducation",
+        "scheduleRemark": "第2-14周上课",
+        "schedules": [
+          { "weekday": 4, "startTime": 7, "entTime": 8, "lessonId": 3011 }
+        ]
+      },
+      {
+        "id": 3012,
+        "code": "CS303.01",
+        "name": { "nameZh": "数据可视化-01班", "nameEn": "Data Visualization-01" },
+        "course": {
+          "id": 2013, "code": "CS303",
+          "nameZh": "数据可视化", "nameEn": "Data Visualization",
+          "credits": 2, "isSubstituteCourse": false, "isSubstituteRetakeCourse": false
+        },
+        "teachers": [{ "id": 913, "nameZh": "黄副教授", "nameEn": "Assoc. Prof. Huang" }],
+        "dateTimePlace": {
+          "textZh": "星期一 7-8节 教学楼A305",
+          "textEn": "Mon 7-8 Building A305"
+        },
+        "campus": { "id": 1, "nameZh": "闵行校区", "nameEn": "Minhang Campus" },
+        "department": { "id": 101, "nameZh": "计算机科学与技术学院", "nameEn": "School of CS" },
+        "limitCount": 60, "stdCount": 33,
+        "preStdCount": 0, "amLimitCount": null, "amStdCount": 0, "preAmStdCount": 0,
+        "isOpenCross": false, "acrossMajorEnable": false, "acrossMajorLimitCount": null,
+        "selectedLesson": null, "pinned": false, "retake": false, "canRetake": false,
+        "canSubsitute": false, "subsituteRetak": false, "coursePackAssoc": null, "virtualCost": null,
+        "hasTs": true, "hasCs": false, "notInTurn": false,
+        "compulsory": false,
+        "courseProperty": "majorElective",
+        "scheduleRemark": null,
+        "schedules": [
+          { "weekday": 1, "startTime": 7, "entTime": 8, "lessonId": 3012 }
+        ]
+      },
+      {
+        "id": 3013,
+        "code": "MATH301.01",
+        "name": { "nameZh": "数学建模-01班", "nameEn": "Mathematical Modeling-01" },
+        "course": {
+          "id": 2014, "code": "MATH301",
+          "nameZh": "数学建模", "nameEn": "Mathematical Modeling",
+          "credits": 3, "isSubstituteCourse": false, "isSubstituteRetakeCourse": false
+        },
+        "teachers": [{ "id": 914, "nameZh": "吕教授", "nameEn": "Prof. Lv" }],
+        "dateTimePlace": {
+          "textZh": "星期二 1-2节 教学楼D302\n星期四 5-6节 教学楼D302",
+          "textEn": "Tue 1-2 Building D302\nThu 5-6 Building D302"
+        },
+        "campus": { "id": 1, "nameZh": "闵行校区", "nameEn": "Minhang Campus" },
+        "department": { "id": 102, "nameZh": "数学科学学院", "nameEn": "School of Math" },
+        "limitCount": 90, "stdCount": 52,
+        "preStdCount": 0, "amLimitCount": null, "amStdCount": 0, "preAmStdCount": 0,
+        "isOpenCross": false, "acrossMajorEnable": false, "acrossMajorLimitCount": null,
+        "selectedLesson": null, "pinned": false, "retake": false, "canRetake": false,
+        "canSubsitute": false, "subsituteRetak": false, "coursePackAssoc": null, "virtualCost": null,
+        "hasTs": true, "hasCs": false, "notInTurn": false,
+        "compulsory": false,
+        "courseProperty": "majorElective",
+        "scheduleRemark": null,
+        "schedules": [
+          { "weekday": 2, "startTime": 1, "entTime": 2, "lessonId": 3013 },
+          { "weekday": 4, "startTime": 5, "entTime": 6, "lessonId": 3013 }
+        ]
+      }
+    ]
+  }
+}

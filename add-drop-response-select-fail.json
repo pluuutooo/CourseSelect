@@ -1,0 +1,13 @@
+{
+  "result": false,
+  "data": {
+    "success": false,
+    "errorMessage": {
+      "text": "选课学分已达上限，无法继续选课",
+      "textZh": "选课学分已达上限，无法继续选课",
+      "textEn": "Credit limit exceeded"
+    },
+    "resend": false
+  },
+  "_comment": "选课请求失败——学分超限"
+}

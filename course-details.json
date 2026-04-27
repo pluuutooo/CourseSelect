@@ -1,0 +1,113 @@
+{
+  "result": false,
+  "data": {
+    "2003": {
+      "courseId": 2003,
+      "syllabus": "进程管理与调度、内存管理（分页/分段/虚拟内存）、文件系统设计、I/O系统、进程同步与通信、死锁检测与预防。含16学时实验课。",
+      "assessment": "平时作业 15% + 实验报告 25% + 期中测试 10% + 期末考试 50%",
+      "prerequisites": ["CS101 程序设计基础", "CS102 数据结构"],
+      "courseStatus": "normal",
+      "statusRemark": "",
+      "weekRange": "1-16周"
+    },
+    "2004": {
+      "courseId": 2004,
+      "syllabus": "计算机网络体系结构、物理层、数据链路层、网络层（IP协议）、传输层（TCP/UDP）、应用层（HTTP/DNS/SMTP）。含Wireshark抓包实验。",
+      "assessment": "平时作业 20% + 实验报告 20% + 期末考试 60%",
+      "prerequisites": ["CS101 程序设计基础"],
+      "courseStatus": "normal",
+      "statusRemark": "",
+      "weekRange": "1-16周"
+    },
+    "2005": {
+      "courseId": 2005,
+      "syllabus": "搜索算法（BFS/DFS/A*）、知识表示与推理、机器学习基础（决策树/SVM/神经网络）、深度学习入门（CNN/RNN）、自然语言处理概述、强化学习简介。",
+      "assessment": "平时作业 20% + 大作业/项目 30% + 期末考试 50%",
+      "prerequisites": ["CS102 数据结构", "MATH103 线性代数", "MATH201 概率论与数理统计"],
+      "courseStatus": "normal",
+      "statusRemark": "",
+      "weekRange": "1-16周"
+    },
+    "2006": {
+      "courseId": 2006,
+      "syllabus": "概率论基础、随机变量及其分布、多维随机变量、数字特征、大数定律与中心极限定理、参数估计、假设检验。",
+      "assessment": "平时作业 20% + 期中测试 20% + 期末考试 60%",
+      "prerequisites": ["MATH101 高等数学(上)", "MATH102 高等数学(下)"],
+      "courseStatus": "normal",
+      "statusRemark": "",
+      "weekRange": "1-18周"
+    },
+    "2007": {
+      "courseId": 2007,
+      "syllabus": "羽毛球基本技术（发球、接发球、高远球、杀球、吊球）、单双打战术、竞赛规则与裁判法、体能训练。",
+      "assessment": "出勤 20% + 技能测试 40% + 体能测试 30% + 课堂表现 10%",
+      "prerequisites": [],
+      "courseStatus": "changed",
+      "statusRemark": "上课地点由体育馆变更为风雨操场（4月起）",
+      "weekRange": "1-16周"
+    },
+    "2008": {
+      "courseId": 2008,
+      "syllabus": "电影美学基础、经典电影赏析（中外各时期代表作品）、镜头语言分析、叙事结构解读、电影批评方法、纪录片赏析。",
+      "assessment": "课堂参与 20% + 影评作业（2篇）40% + 期末影评论文 40%",
+      "prerequisites": [],
+      "courseStatus": "normal",
+      "statusRemark": "",
+      "weekRange": "3-15周"
+    },
+    "2009": {
+      "courseId": 2009,
+      "syllabus": "毛泽东思想概论、中国特色社会主义理论体系、习近平新时代中国特色社会主义思想概述、社会主义核心价值观。",
+      "assessment": "出勤/课堂参与 20% + 读书报告 20% + 期末开卷考试 60%",
+      "prerequisites": ["MARX001 马克思主义基本原理"],
+      "courseStatus": "normal",
+      "statusRemark": "",
+      "weekRange": "1-16周"
+    },
+    "2010": {
+      "courseId": 2010,
+      "syllabus": "英语演讲技巧（语音语调、肢体语言、逻辑组织）、即兴演讲、说服性演讲、辩论入门、TED风格演讲训练。",
+      "assessment": "课堂演讲（4次）60% + 同伴互评 10% + 期末演讲 30%",
+      "prerequisites": ["ENG001 大学英语(四) 或同等水平"],
+      "courseStatus": "normal",
+      "statusRemark": "",
+      "weekRange": "1-16周"
+    },
+    "2011": {
+      "courseId": 2011,
+      "syllabus": "鸦片战争与近代中国的开端、太平天国与洋务运动、辛亥革命、五四运动与中国共产党的成立、抗日战争、解放战争与新中国成立。",
+      "assessment": "出勤 10% + 课堂讨论 20% + 期末论述题考试 70%",
+      "prerequisites": [],
+      "courseStatus": "normal",
+      "statusRemark": "",
+      "weekRange": "1-16周"
+    },
+    "2012": {
+      "courseId": 2012,
+      "syllabus": "量子力学的哲学思考、波粒二象性与认知革命、不确定性原理与思维模式、量子纠缠与系统思维、量子计算概念导论。",
+      "assessment": "课堂讨论参与 30% + 读书笔记 30% + 期末小论文 40%",
+      "prerequisites": [],
+      "courseStatus": "cancelled",
+      "statusRemark": "因选课人数不足，本学期停开",
+      "weekRange": "2-14周"
+    },
+    "2013": {
+      "courseId": 2013,
+      "syllabus": "数据可视化原理、D3.js基础与实战、ECharts图表开发、交互式可视化设计、地理信息可视化、大数据可视化案例分析。",
+      "assessment": "课堂练习 20% + 可视化项目（大作业）50% + 期末答辩 30%",
+      "prerequisites": ["CS101 程序设计基础"],
+      "courseStatus": "normal",
+      "statusRemark": "",
+      "weekRange": "1-16周"
+    },
+    "2014": {
+      "courseId": 2014,
+      "syllabus": "数学建模方法论、线性规划与整数规划、微分方程模型、统计回归模型、图论模型、随机模型、优化算法、建模竞赛案例分析。",
+      "assessment": "课堂作业 20% + 建模报告（3次）45% + 期末建模考试 35%",
+      "prerequisites": ["MATH101 高等数学(上)", "MATH103 线性代数"],
+      "courseStatus": "normal",
+      "statusRemark": "",
+      "weekRange": "1-16周"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "result": false,
+  "data": {
+    "virtualCostTotal": 100,
+    "virtualCostSpent": 35
+  },
+  "_comment": "意愿值余额（仅在 enableVirtualWallet 为 true 的轮次中使用）"
+}

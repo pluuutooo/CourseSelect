@@ -1,0 +1,68 @@
+{
+  "result": false,
+  "data": {
+    "turn": {
+      "id": 5001,
+      "name": "2025-2026学年第二学期第一轮选课",
+      "nameZh": "2025-2026学年第二学期第一轮选课",
+      "nameEn": "2025-2026 Spring Semester Round 1",
+      "canSelect": true,
+      "canDrop": true,
+      "turnMode": {
+        "enableVirtualWallet": false,
+        "showCount": false
+      },
+      "turnTab": {
+        "showPlanTab": true,
+        "showPlanLessonTab": false,
+        "showPublicCourseTab": true,
+        "showPublicCompulsoryTab": true,
+        "showAllCourseTab": true,
+        "showCourseTableTab": true,
+        "showRetakeTab": true,
+        "showSelfDeptTab": true,
+        "showAcrossMajorTab": false,
+        "planTabName": "培养方案",
+        "planLessonTabName": "培养方案(教学班)",
+        "publicCourseTabName": "公共选修课",
+        "publicCompulsoryTabName": "公共必修课",
+        "allCourseTabName": "全部课程",
+        "courseTableTabName": "课表选课",
+        "retakeTabName": "重修选课",
+        "selfDeptTabName": "本院系课程",
+        "selectedTabName": "已选课程",
+        "acrossMajorTabName": "跨专业选课",
+        "showRetakeTab": true,
+        "showAcrossMajorTab": false
+      }
+    },
+    "semester": {
+      "id": 401,
+      "nameZh": "2025-2026学年第二学期",
+      "nameEn": "2025-2026 Spring Semester"
+    },
+    "programId": 801,
+    "deptId": 101,
+    "campusId": 1,
+    "notPinnedName": "WAIT_SCREEN",
+    "packCourseSelect": false,
+    "substituteCourseRetake": false,
+    "delayRelease": false,
+    "showRetakeCount": false,
+    "unSignedPermission": false,
+    "semesterCreditUpperLimit": true,
+    "semesterAmountUpperLimit": true,
+    "totalCreditUpperLimit": false,
+    "totalAmountUpperLimit": false,
+    "semesterCourseTypeCreditUpperLimit": false,
+    "semesterCourseTypeAmountUpperLimit": false,
+    "totalCourseTypeCreditUpperLimit": false,
+    "totalCourseTypeAmountUpperLimit": false,
+    "semesterCourseFlagCreditUpperLimit": false,
+    "semesterCourseFlagAmountUpperLimit": false,
+    "totalCourseFlagCreditUpperLimit": false,
+    "totalCourseFlagAmountUpperLimit": false,
+    "tsUrl": "",
+    "csUrl": ""
+  }
+}

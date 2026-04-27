@@ -1,0 +1,152 @@
+{
+  "result": false,
+  "data": {
+    "announcements": [
+      {
+        "id": 1,
+        "title": "选课系统停机维护通知",
+        "content": "因系统升级，选课系统将于2026年4月12日（周日）22:00至4月13日（周一）06:00进行停机维护。维护期间将无法访问选课系统，请同学们提前做好安排。",
+        "publishTime": "2026-04-10 09:00:00",
+        "maintainStart": "2026-04-12 22:00:00",
+        "maintainEnd": "2026-04-13 06:00:00",
+        "scope": "选课系统（本科生+研究生）",
+        "status": "completed",
+        "source": "信息化办公室"
+      },
+      {
+        "id": 2,
+        "title": "统一身份认证平台升级通知",
+        "content": "统一身份认证平台将于2026年4月18日（周六）00:00至06:00进行升级。升级期间使用统一认证登录的所有系统（包括选课系统、教务系统等）将无法正常登录。",
+        "publishTime": "2026-04-15 14:00:00",
+        "maintainStart": "2026-04-18 00:00:00",
+        "maintainEnd": "2026-04-18 06:00:00",
+        "scope": "统一身份认证平台及关联系统",
+        "status": "upcoming",
+        "source": "信息化办公室"
+      },
+      {
+        "id": 3,
+        "title": "第二轮选课期间服务器扩容说明",
+        "content": "为保障第二轮选课顺利进行，信息化办公室已完成服务器扩容。如选课过程中遇到响应缓慢的情况，请稍后重试，避免频繁刷新。",
+        "publishTime": "2026-04-14 08:00:00",
+        "maintainStart": null,
+        "maintainEnd": null,
+        "scope": "选课系统",
+        "status": "info",
+        "source": "信息化办公室"
+      },
+      {
+        "id": 4,
+        "title": "研究生选课系统数据迁移通知",
+        "content": "研究生选课系统将于2026年4月25日进行数据迁移，届时研究生选课功能暂停使用约2小时（预计10:00-12:00）。本科生选课不受影响。",
+        "publishTime": "2026-04-16 10:00:00",
+        "maintainStart": "2026-04-25 10:00:00",
+        "maintainEnd": "2026-04-25 12:00:00",
+        "scope": "研究生选课系统",
+        "status": "upcoming",
+        "source": "研究生院"
+      }
+    ],
+    "services": [
+      {
+        "id": "undergraduate",
+        "name": "本科生选课系统",
+        "url": "https://byyt.ecnu.edu.cn",
+        "description": "公共数据库选课平台（本科生）",
+        "status": "online",
+        "lastCheck": "2026-04-16 14:25:00",
+        "responseTime": 230
+      },
+      {
+        "id": "graduate",
+        "name": "研究生选课系统",
+        "url": "https://yjsxk.ecnu.edu.cn",
+        "description": "研究生教育教学管理平台",
+        "status": "online",
+        "lastCheck": "2026-04-16 14:25:00",
+        "responseTime": 185
+      },
+      {
+        "id": "portal",
+        "name": "统一身份认证",
+        "url": "https://portal.ecnu.edu.cn",
+        "description": "华东师范大学统一认证登录",
+        "status": "online",
+        "lastCheck": "2026-04-16 14:25:00",
+        "responseTime": 120
+      },
+      {
+        "id": "jwxt",
+        "name": "教务管理系统",
+        "url": "https://jwxt.ecnu.edu.cn",
+        "description": "教务处综合管理系统",
+        "status": "maintenance",
+        "lastCheck": "2026-04-16 14:25:00",
+        "responseTime": null
+      }
+    ],
+    "errorGuide": [
+      {
+        "code": "500",
+        "title": "服务器内部错误",
+        "description": "服务器处理请求时发生异常",
+        "suggestions": [
+          "等待1-2分钟后重试",
+          "清除浏览器缓存后重新登录",
+          "如持续出现，可能是系统正在维护中，请查看上方维护公告"
+        ]
+      },
+      {
+        "code": "502",
+        "title": "网关错误",
+        "description": "服务器负载过高或正在重启",
+        "suggestions": [
+          "选课高峰期常见，请错峰操作",
+          "等待3-5分钟后重试",
+          "尝试切换网络（WiFi ↔ 移动数据）"
+        ]
+      },
+      {
+        "code": "503",
+        "title": "服务不可用",
+        "description": "系统正在维护或暂时超载",
+        "suggestions": [
+          "查看上方维护公告确认是否有计划维护",
+          "高峰期常见，请稍后再试",
+          "如果持续超过30分钟，请联系信息化办公室"
+        ]
+      },
+      {
+        "code": "AUTH",
+        "title": "统一认证登录失败",
+        "description": "统一身份认证平台返回错误或无法跳转",
+        "suggestions": [
+          "确认用户名和密码是否正确（注意大小写）",
+          "清除浏览器Cookie后重新登录",
+          "尝试使用Chrome或Edge浏览器的无痕/隐私模式",
+          "确认统一认证平台是否在维护（查看上方服务状态）",
+          "如密码遗忘，请前往统一认证平台重置密码"
+        ]
+      },
+      {
+        "code": "TIMEOUT",
+        "title": "请求超时",
+        "description": "服务器未在规定时间内响应",
+        "suggestions": [
+          "检查网络连接是否正常",
+          "尝试切换网络环境（校园网 ↔ 移动网络）",
+          "选课高峰期负载大，请错峰操作",
+          "避免同时打开多个选课页面"
+        ]
+      }
+    ],
+    "contact": {
+      "department": "信息化治理办公室",
+      "phone": "021-54345000",
+      "email": "its@ecnu.edu.cn",
+      "workHours": "周一至周五 8:00-17:00",
+      "location": "闵行校区行政楼B座108室",
+      "emergencyNote": "选课期间提供7×12小时值班服务（8:00-20:00）"
+    }
+  }
+}

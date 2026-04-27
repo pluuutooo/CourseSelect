@@ -1,0 +1,55 @@
+{
+  "result": false,
+  "data": [
+    {
+      "id": "TK20260415001",
+      "type": "select",
+      "typeLabel": "选课问题",
+      "description": "在第一轮意愿值选课期间，系统显示已选课成功但在已选课程列表中找不到该课程（CS301操作系统）。",
+      "hasScreenshot": true,
+      "status": "resolved",
+      "createdAt": "2026-04-15 14:23",
+      "replies": [
+        {
+          "from": "staff",
+          "name": "教务处 李老师",
+          "content": "您好，经核实，该课程选课记录存在延迟同步问题，已为您手动确认选课状态。请刷新页面后查看。",
+          "time": "2026-04-15 16:45"
+        },
+        {
+          "from": "user",
+          "name": "我",
+          "content": "已确认，课程已正常显示，谢谢！",
+          "time": "2026-04-15 17:02"
+        }
+      ]
+    },
+    {
+      "id": "TK20260418002",
+      "type": "login",
+      "typeLabel": "登录问题",
+      "description": "使用校园VPN登录选课系统时，页面一直显示503错误，尝试了清除缓存和更换浏览器都没有解决。",
+      "hasScreenshot": true,
+      "status": "processing",
+      "createdAt": "2026-04-18 09:15",
+      "replies": [
+        {
+          "from": "staff",
+          "name": "信息办 王工",
+          "content": "感谢反馈。经排查，VPN服务节点在该时段进行了扩容维护，目前已恢复。请您再次尝试，如仍有问题请回复。",
+          "time": "2026-04-18 11:30"
+        }
+      ]
+    },
+    {
+      "id": "TK20260420003",
+      "type": "info",
+      "typeLabel": "信息错误",
+      "description": "MATH201概率论与数理统计的上课教室显示为教学楼D301，但实际公告已变更为教学楼B105。",
+      "hasScreenshot": false,
+      "status": "pending",
+      "createdAt": "2026-04-20 20:08",
+      "replies": []
+    }
+  ]
+}

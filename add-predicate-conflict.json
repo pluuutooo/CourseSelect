@@ -1,0 +1,17 @@
+{
+  "result": false,
+  "data": {
+    "success": false,
+    "messages": {
+      "3001": {
+        "text": "ATTEND",
+        "textZh": "ATTEND",
+        "textEn": "ATTEND"
+      }
+    },
+    "errorData": {
+      "type": "normal"
+    }
+  },
+  "_comment": "选课校验发现时间冲突，ATTEND 表示需要免听确认"
+}

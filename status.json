@@ -1,0 +1,21 @@
+{
+  "result": false,
+  "data": {
+    "semesterCreditActual": 11,
+    "semesterCreditUpperLimit": 30,
+    "semesterAmountActual": 3,
+    "semesterAmountUpperLimit": 10,
+    "totalCreditActual": 95,
+    "totalCreditUpperLimit": null,
+    "totalAmountActual": 28,
+    "totalAmountUpperLimit": null,
+    "courseTypeCreditsLimits": [],
+    "courseTypeAmountLimits": [],
+    "courseTypeTotalCreditsLimits": [],
+    "courseTypeTotalAmountLimits": [],
+    "courseSpecificFlagCreditLimits": [],
+    "courseSpecificFlagAmountLimits": [],
+    "courseSpecificFlagTotalCreditLimits": [],
+    "courseSpecificFlagTotalAmountLimits": []
+  }
+}
