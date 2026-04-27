@@ -1,0 +1,182 @@
+/* ===== P0-5: Preselection Confirmation Reminder ===== */
+
+.confirm-reminder-card {
+  background: linear-gradient(135deg, #FFF7E6 0%, #FFF1D6 100%);
+  border: 1px solid #FAAD14;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: box-shadow .2s;
+  position: relative;
+}
+.confirm-reminder-card:hover {
+  box-shadow: 0 2px 12px rgba(250, 173, 20, .25);
+}
+
+.confirm-reminder-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #FAAD14;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+  animation: confirm-pulse 2s ease-in-out infinite;
+}
+
+@keyframes confirm-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(250, 173, 20, .4); }
+  50%      { box-shadow: 0 0 0 8px rgba(250, 173, 20, 0); }
+}
+
+.confirm-reminder-body {
+  flex: 1;
+  min-width: 0;
+}
+.confirm-reminder-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #303133;
+  margin-bottom: 4px;
+}
+.confirm-reminder-desc {
+  font-size: 13px;
+  color: #606266;
+}
+.confirm-reminder-deadline {
+  font-weight: 600;
+  color: #E6A23C;
+}
+
+.confirm-reminder-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.confirm-reminder-dismiss {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  cursor: pointer;
+  color: #909399;
+  font-size: 14px;
+}
+.confirm-reminder-dismiss:hover {
+  color: #606266;
+}
+
+/* Confirm Dialog List */
+.confirm-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.confirm-progress-stats {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: #606266;
+}
+.confirm-progress-stats span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.confirm-course-card {
+  border: 1px solid #EBEEF5;
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  transition: border-color .2s;
+}
+.confirm-course-card:hover {
+  border-color: #C0C4CC;
+}
+.confirm-course-card.wait {
+  border-left: 3px solid #E6A23C;
+}
+.confirm-course-card.done {
+  border-left: 3px solid #67C23A;
+  background: #F0F9EB;
+}
+.confirm-course-card.rejected {
+  border-left: 3px solid #909399;
+  background: #F4F4F5;
+  opacity: .7;
+}
+
+.confirm-course-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.confirm-course-info {
+  flex: 1;
+  min-width: 0;
+}
+.confirm-course-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #303133;
+  margin-bottom: 2px;
+}
+.confirm-course-code {
+  font-size: 12px;
+  color: #909399;
+}
+.confirm-course-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  font-size: 13px;
+  color: #606266;
+  margin-bottom: 8px;
+}
+
+.confirm-status-explain {
+  font-size: 12px;
+  color: #909399;
+  padding: 6px 10px;
+  background: #F5F7FA;
+  border-radius: 4px;
+  margin-top: 6px;
+}
+
+.confirm-course-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.confirm-deadline-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #FDF6EC;
+  border: 1px solid #FAECD8;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: #E6A23C;
+}
+.confirm-deadline-banner .countdown {
+  font-weight: 700;
+  font-size: 15px;
+  color: #F56C6C;
+}

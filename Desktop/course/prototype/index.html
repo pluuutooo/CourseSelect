@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECNU 选课系统</title>
+  <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/course-select.css">
+  <link rel="stylesheet" href="css/review.css">
+  <link rel="stylesheet" href="css/timeline.css">
+  <link rel="stylesheet" href="css/system-status.css">
+  <link rel="stylesheet" href="css/confirm-remind.css">
+  <link rel="stylesheet" href="css/virtual-cost-guide.css">
+  <link rel="stylesheet" href="css/unselected-reason.css">
+  <link rel="stylesheet" href="css/feedback.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Login Page -->
+    <div v-if="currentPage === 'login'" class="login-page">
+      <div class="login-card">
+        <h1 class="login-title">选课</h1>
+        <p class="login-subtitle">账号登录</p>
+        <el-form :model="loginForm" :rules="loginRules" ref="loginFormRef">
+          <el-form-item>
+            <div class="role-selector-wrapper">
+              <div class="role-selector-label">选择身份</div>
+              <div class="role-selector">
+                <div class="role-option" :class="{ active: loginForm.role === 'undergraduate' }" @click="loginForm.role = 'undergraduate'">
+                  <el-icon :size="24"><School /></el-icon>
+                  <span>本科生</span>
+                </div>
+                <div class="role-option" :class="{ active: loginForm.role === 'graduate' }" @click="loginForm.role = 'graduate'">
+                  <el-icon :size="24"><Reading /></el-icon>
+                  <span>研究生</span>
+                </div>
+              </div>
+            </div>
+          </el-form-item>
+          <el-form-item prop="username">
+            <el-input v-model="loginForm.username" placeholder="用户名" prefix-icon="User" size="large"></el-input>
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input v-model="loginForm.password" type="password" placeholder="密码" prefix-icon="Lock" size="large" show-password></el-input>
+          </el-form-item>
+          <el-form-item prop="captcha">
+            <div class="captcha-row">
+              <el-input v-model="loginForm.captcha" placeholder="验证码" size="large" style="flex:1"></el-input>
+              <div class="captcha-img" @click="refreshCaptcha" :title="'点击刷新'">
+                <canvas ref="captchaCanvas" width="120" height="40"></canvas>
+              </div>
+            </div>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="large" style="width:100%" @click="handleLogin">登 录</el-button>
+          </el-form-item>
+        </el-form>
+        <div style="text-align:center; margin-top:12px">
+          <el-button text type="info" size="small" @click="openSystemStatus">
+            <el-icon><Monitor /></el-icon> 系统状态
+          </el-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- System Status Page -->
+    <div v-if="currentPage === 'systemStatus'" class="system-status-page">
+      <div class="page-header">
+        <el-button text @click="currentPage='login'"><el-icon><arrow-left /></el-icon> 返回登录</el-button>
+        <h2>系统状态</h2>
+      </div>
+
+      <div class="ss-grid">
+        <!-- Service Status -->
+        <div class="ss-card ss-full">
+          <div class="ss-card-title"><el-icon><Monitor /></el-icon> 服务状态</div>
+          <div class="ss-services">
+            <div v-for="svc in services" :key="svc.id" class="ss-service-card">
+              <div class="ss-svc-indicator" :class="svc.status"></div>
+              <div class="ss-svc-info">
+                <div class="ss-svc-name">{{ svc.name }}</div>
+                <div class="ss-svc-desc">{{ svc.description }}</div>
+                <div class="ss-svc-status">
+                  <el-tag :type="getServiceTag(svc.status).type" size="small">
+                    {{ getServiceTag(svc.status).text }}
+                  </el-tag>
+                  <span v-if="svc.responseTime" style="font-size:12px;color:#909399">
+                    响应 {{ svc.responseTime }}ms
+                  </span>
+                </div>
+                <div class="ss-svc-url">{{ svc.url }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Announcements -->
+        <div class="ss-card ss-full">
+          <div class="ss-card-title"><el-icon><Bell /></el-icon> 维护公告</div>
+          <div v-for="ann in announcements" :key="ann.id" class="ss-announcement">
+            <div class="ss-ann-header">
+              <el-tag :type="getAnnouncementTag(ann.status).type" size="small">
+                {{ getAnnouncementTag(ann.status).text }}
+              </el-tag>
+              <span class="ss-ann-title">{{ ann.title }}</span>
+              <span class="ss-ann-time">{{ ann.publishTime.slice(0,10) }}</span>
+            </div>
+            <div class="ss-ann-body">{{ ann.content }}</div>
+            <div class="ss-ann-meta">
+              <span v-if="ann.maintainStart">维护时间：{{ ann.maintainStart }} ~ {{ ann.maintainEnd }}</span>
+              <span>影响范围：{{ ann.scope }}</span>
+              <span>来源：{{ ann.source }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error Guide -->
+        <div class="ss-card">
+          <div class="ss-card-title"><el-icon><question-filled /></el-icon> 常见问题自检</div>
+          <div v-for="err in errorGuide" :key="err.code" class="ss-error-item">
+            <div class="ss-error-header" @click="toggleError(err.code)">
+              <span class="ss-error-code">{{ err.code }}</span>
+              <span class="ss-error-title">{{ err.title }}</span>
+              <el-icon class="ss-error-expand" :class="{ open: isErrorExpanded(err.code) }">
+                <arrow-right />
+              </el-icon>
+            </div>
+            <div v-if="isErrorExpanded(err.code)" class="ss-error-body">
+              <div style="font-size:12px;color:#909399;margin-bottom:6px">{{ err.description }}</div>
+              <ul>
+                <li v-for="(s, i) in err.suggestions" :key="i">{{ s }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact -->
+        <div class="ss-card">
+          <div class="ss-card-title"><el-icon><Phone /></el-icon> 联系信息化办公室</div>
+          <div class="ss-contact">
+            <div class="ss-contact-item"><span class="label">部门：</span>{{ contact.department }}</div>
+            <div class="ss-contact-item"><span class="label">电话：</span>{{ contact.phone }}</div>
+            <div class="ss-contact-item"><span class="label">邮箱：</span>{{ contact.email }}</div>
+            <div class="ss-contact-item"><span class="label">办公时间：</span>{{ contact.workHours }}</div>
+            <div class="ss-contact-item"><span class="label">地址：</span>{{ contact.location }}</div>
+          </div>
+          <div v-if="contact.emergencyNote" class="ss-contact-note">
+            <el-icon><warning-filled /></el-icon> {{ contact.emergencyNote }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Turns Page (Timeline) -->
+    <div v-if="currentPage === 'turns'" class="turns-page">
+      <div class="page-header">
+        <el-button text @click="currentPage='login'"><el-icon><arrow-left /></el-icon> 返回</el-button>
+        <h2>{{ currentSemester }} 选课时间线</h2>
+        <div style="margin-left:auto">
+          <el-badge :value="fbUnreadCount" :hidden="fbUnreadCount === 0" :max="9">
+            <el-button text type="info" @click="openFeedback">
+              <el-icon><chat-dot-square /></el-icon> 问题反馈
+            </el-button>
+          </el-badge>
+        </div>
+      </div>
+
+      <!-- P0-5: Graduate preselection confirmation reminder -->
+      <div v-if="showConfirmReminder" class="confirm-reminder-card" @click="openConfirmDialog">
+        <div class="confirm-reminder-icon"><el-icon><Bell /></el-icon></div>
+        <div class="confirm-reminder-body">
+          <div class="confirm-reminder-title">您有 {{ pendingConfirmCourses.length }} 门预选课程待确认选课或退课</div>
+          <div class="confirm-reminder-desc">
+            确认截止剩余 <span class="confirm-reminder-deadline">{{ deadlineCountdown }}</span>，逾期未确认将视为放弃
+          </div>
+        </div>
+        <div class="confirm-reminder-actions">
+          <el-button type="warning" @click.stop="openConfirmDialog">去确认</el-button>
+        </div>
+        <span class="confirm-reminder-dismiss" @click.stop="dismissConfirmReminder" title="今日不再提醒">
+          <el-icon><Close /></el-icon>
+        </span>
+      </div>
+
+      <div class="timeline-container">
+        <div v-for="group in groupedNodes" :key="group.roundNo" class="timeline-group">
+          <!-- Round header -->
+          <div class="tl-round-header" :class="group.status" @click="toggleRound(group.roundNo)">
+            <div class="tl-round-dot"></div>
+            <div class="tl-round-info">
+              <div class="tl-round-name">{{ group.turnName }}</div>
+              <div class="tl-round-meta">
+                {{ formatShort(group.turn.beginTime) }} ~ {{ formatShort(group.turn.endTime) }}
+                <template v-if="group.turn.turnMode.enableVirtualWallet"> · 意愿值模式</template>
+                <template v-else> · 先到先得</template>
+              </div>
+            </div>
+            <div class="tl-round-badge">           
+              <el-tag v-if="group.status === 'active'" type="success" size="small" effect="dark">进行中</el-tag>
+              <el-tag v-else-if="group.status === 'upcoming'" type="warning" size="small">即将开始</el-tag>
+              <el-tag v-else-if="group.status === 'past'" type="info" size="small">已结束</el-tag>
+              <el-tag v-else size="small">未开始</el-tag>
+            </div>
+            <div class="tl-round-actions" @click.stop>
+              <el-button
+                v-if="group.status === 'active' || group.status === 'upcoming'"
+                :type="group.status === 'active' ? 'primary' : 'warning'" size="small"
+                @click="enterSelect(group.turn)"
+              >{{ group.status === 'active' ? '进入选课' : '进入预览' }}</el-button>
+              <el-button v-if="group.turn.bulletin" size="small" text @click="showBulletin(group.turn)">
+                <el-icon><info-filled /></el-icon>
+              </el-button>               
+            </div>
+            <el-icon class="tl-expand-icon" :class="{ expanded: isRoundExpanded(group.roundNo) }">
+              <arrow-right />
+            </el-icon>
+          </div>
+
+          <!-- Nodes inside this round -->
+          <div class="tl-nodes" :class="isRoundExpanded(group.roundNo) ? 'expanded' : 'collapsed'"
+               :style="isRoundExpanded(group.roundNo) ? 'max-height: 600px' : ''">
+            <div v-for="node in group.nodes" :key="node.id"
+                 class="tl-node" :class="[node.status, node.type === 'quota' ? 'quota' : '']">
+              <div class="tl-node-content">
+                <el-icon><component :is="node.icon" /></el-icon>
+                <div>
+                  <div class="tl-node-label">{{ node.label }}</div>
+                  <div class="tl-node-desc">{{ node.desc }}</div>
+                </div>
+                <div class="tl-node-actions">
+                  <span v-if="node.status !== 'past'" class="tl-remind-btn"
+                        :class="{ active: isReminded(node.id) }"
+                        @click="toggleReminder(node.id)"
+                        :title="isReminded(node.id) ? '取消提醒' : '订阅提醒（提前15分钟）'">
+                    <el-icon><Bell /></el-icon>
+                  </span>
+                  <el-button v-if="node.canEnter && node.status === 'active'"
+                             type="primary" size="small" class="tl-enter-btn"
+                             @click="enterSelect(node.turn)">
+                    开始选课
+                  </el-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demo time control panel -->
+      <div class="tl-demo-panel">
+        <div class="tl-demo-panel-title">演示控制：模拟当前时间</div>
+        <el-input v-model="mockNowStr" size="small" placeholder="YYYY-MM-DD HH:mm"
+                  @change="updateMockNow">
+          <template #prepend>时间</template>
+        </el-input>
+        <div class="tl-demo-presets">
+          <el-button size="small" @click="setMockPreset('2026-04-06T10:00:00')">R1预览</el-button>
+          <el-button size="small" @click="setMockPreset('2026-04-09T14:00:00')">R1选课</el-button>
+          <el-button size="small" @click="setMockPreset('2026-04-11T10:00:00')">R1结束</el-button>
+          <el-button size="small" @click="setMockPreset('2026-04-16T11:30:00')">R2选课</el-button>
+          <el-button size="small" @click="setMockPreset('2026-04-22T09:00:00')">R3选课</el-button>
+          <el-button size="small" @click="setMockPreset('2026-04-29T10:00:00')">释放期</el-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Select Page -->
+    <div v-if="currentPage === 'select'" class="select-page">
+      <!-- Top Bar -->
+      <div class="top-bar">
+        <div class="top-left">
+          <el-button text @click="currentPage='turns'"><el-icon><arrow-left /></el-icon></el-button>
+          <span class="turn-name">{{ currentTurn?.nameZh }}</span>
+        </div>
+        <div class="top-right">
+          <el-button text type="primary" @click="openGuide">
+            <el-icon><Compass /></el-icon> 意愿值向导
+          </el-button>
+          <el-badge :value="fbUnreadCount" :hidden="fbUnreadCount === 0" :max="9">
+            <el-button text type="info" @click="openFeedback">
+              <el-icon><chat-dot-square /></el-icon> 问题反馈
+            </el-button>
+          </el-badge>
+          <span v-if="selectOptions?.turn?.turnMode?.enableVirtualWallet" class="virtual-wallet">
+            意愿值: {{ virtualCost.spent }}/{{ virtualCost.total }}（剩余 <span :style="{color: vcRemaining < 0 ? '#F56C6C' : vcRemaining === 0 ? '#909399' : '#67C23A'}">{{ vcRemaining }}</span>）
+          </span>
+        </div>
+      </div>
+
+      <div class="select-body">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+          <div class="sidebar-section">    
+            <h4>我的意愿值</h4>      
+            <div class="status-item">
+              <span>剩余意愿值</span>
+              <el-progress :percentage="(vcRemaining/virtualCost.total)*100" :format="()=>`${vcRemaining}/${virtualCost.total}`" :stroke-width="10" :color="vcRemaining <= 0 ? '#F56C6C' : vcRemaining <= 20 ? '#E6A23C' : '#67C23A'"></el-progress>
+            </div>
+          </div>            
+          <div class="sidebar-section">
+            <h4>我的选课状态</h4>
+            <div class="status-item">
+              <span>学期学分</span>
+              <el-progress :percentage="(status.semesterCreditActual/status.semesterCreditUpperLimit)*100" :format="()=>`${status.semesterCreditActual}/${status.semesterCreditUpperLimit}`" :stroke-width="10"></el-progress>
+            </div>
+            <div class="status-item">
+              <span>学期门数</span>
+              <el-progress :percentage="(status.semesterAmountActual/status.semesterAmountUpperLimit)*100" :format="()=>`${status.semesterAmountActual}/${status.semesterAmountUpperLimit}`" :stroke-width="10"></el-progress>
+            </div>
+
+          </div>
+          <div class="sidebar-section">
+            <h4>培养方案完成情况</h4>
+            <div v-for="mod in programCompletion" :key="mod.id" class="program-item">
+              <span>{{ mod.nameZh }}</span>
+              <el-progress :percentage="(mod.moduleStatistic.passedCredits/mod.requiredCredits)*100" :format="()=>`${mod.moduleStatistic.passedCredits}/${mod.requiredCredits}`" :stroke-width="8" :color="'#67C23A'"></el-progress>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+          <el-tabs v-model="activeTab" @tab-change="onTabChange">
+            <el-tab-pane label="培养方案" name="majorPlan"></el-tab-pane>
+            <el-tab-pane label="列表选课" name="allLesson"></el-tab-pane>
+            <el-tab-pane label="课表选课" name="courseTable"></el-tab-pane>
+            <el-tab-pane label="已选课程" name="selectedLesson"></el-tab-pane>
+            <el-tab-pane label="课程评价" name="courseReview"></el-tab-pane>
+          </el-tabs>
+
+          <!-- Major Plan Tab -->
+          <div v-if="activeTab === 'majorPlan'" class="tab-content">
+            <div v-for="mod in majorPlanModules" :key="mod.id" class="plan-module">
+              <div class="module-header" @click="mod._expanded = !mod._expanded">
+                <el-icon><component :is="mod._expanded ? 'ArrowDown' : 'ArrowRight'" /></el-icon>
+                <span class="module-name">{{ mod.nameZh }}</span>
+                <span class="module-stat">
+                  （要求{{ mod.requiredCredits }}学分 | 已完成{{ mod.moduleStatistic.passedCredits }} | 已选{{ mod.moduleStatistic.selectedCredits }}）
+                </span>
+              </div>
+              <div v-if="mod._expanded" class="module-body">
+                <div v-for="pc in mod.planCourses" :key="pc.id" class="plan-course-row">
+                  <span class="pc-name">{{ pc.course.code }} {{ pc.course.nameZh }}</span>
+                  <span class="pc-credits">{{ pc.course.credits }}学分</span>
+                  <span class="pc-term">建议学期: {{ pc.planCourseSuggestTermsText }}</span>
+                  <el-tag v-if="pc.courseSelectPassStatus === 'PASS'" type="success" size="small">已通过</el-tag>
+                  <el-tag v-else-if="pc.selectedLesson" type="success" size="small">已选中</el-tag>
+                  <el-tag v-else-if="pc.notInTurn" type="info" size="small">未开课</el-tag>
+                  <el-tag v-else type="warning" size="small">未选</el-tag>
+                  <el-button
+                    v-if="pc.courseSelectPassStatus !== 'PASS' && !pc.notInTurn && !pc.selectedLesson"
+                    type="primary" size="small" text
+                    @click="openDrawer(pc.course)"
+                  >选课</el-button>
+                  <el-button
+                    v-if="pc.selectedLesson"
+                    type="danger" size="small" text
+                    @click="handleDrop(pc.selectedLesson)"
+                  >退课</el-button>
+                </div>
+                <!-- sub-modules -->
+                <div v-for="child in mod.children" :key="child.id" class="sub-module">
+                  <div class="module-header sub" @click="child._expanded = !child._expanded">
+                    <el-icon><component :is="child._expanded ? 'ArrowDown' : 'ArrowRight'" /></el-icon>
+                    <span class="module-name">{{ child.nameZh }}</span>
+                    <span class="module-stat">
+                      （要求{{ child.requiredCredits }}学分 | 已完成{{ child.moduleStatistic.passedCredits }} | 已选{{ child.moduleStatistic.selectedCredits }}）
+                    </span>
+                  </div>
+                  <div v-if="child._expanded" class="module-body">
+                    <div v-for="pc in child.planCourses" :key="pc.id" class="plan-course-row">
+                      <span class="pc-name">{{ pc.course.code }} {{ pc.course.nameZh }}</span>
+                      <span class="pc-credits">{{ pc.course.credits }}学分</span>
+                      <span class="pc-term">建议学期: {{ pc.planCourseSuggestTermsText }}</span>
+                      <el-tag v-if="pc.courseSelectPassStatus === 'PASS'" type="success" size="small">已通过</el-tag>
+                      <el-tag v-else-if="pc.selectedLesson" type="success" size="small">已选中</el-tag>
+                      <el-tag v-else-if="pc.notInTurn" type="info" size="small">未开课</el-tag>
+                      <el-tag v-else type="warning" size="small">未选</el-tag>
+                      <el-button
+                        v-if="pc.courseSelectPassStatus !== 'PASS' && !pc.notInTurn && !pc.selectedLesson"
+                        type="primary" size="small" text
+                        @click="openDrawer(pc.course)"
+                      >选课</el-button>
+                      <el-button
+                        v-if="pc.selectedLesson"
+                        type="danger" size="small" text
+                        @click="handleDrop(pc.selectedLesson)"
+                      >退课</el-button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Course List Tabs (publicCompulsory, publicCourse, allLesson, retake, deptCourse) -->
+          <div v-if="activeTab === 'allLesson'" class="tab-content">
+            <!-- Filters -->
+            <div class="filter-bar">
+              <el-input v-model="filters.keyword" placeholder="课程名称/代码" clearable size="default" style="width:180px"></el-input>
+              <el-input v-model="filters.lessonName" placeholder="教学班" clearable size="default" style="width:140px"></el-input>
+              <el-input v-model="filters.teacher" placeholder="教师" clearable size="default" style="width:120px"></el-input>
+              <el-select v-model="filters.weekday" placeholder="星期" clearable size="default" style="width:100px">
+                <el-option v-for="d in 5" :key="d" :label="'星期'+['一','二','三','四','五'][d-1]" :value="d"></el-option>
+              </el-select>
+              <el-select v-model="filters.campus" placeholder="校区" clearable size="default" style="width:120px">
+                <el-option v-for="c in queryCondition.campuses" :key="c.id" :label="c.nameZh" :value="c.id"></el-option>
+              </el-select>
+              <el-select v-model="filters.courseProperty" placeholder="课程性质" clearable size="default" style="width:130px">
+                <el-option label="公共必修" value="publicCompulsory"></el-option>
+                <el-option label="通识教育" value="generalEducation"></el-option>
+                <el-option label="专业必修" value="majorCompulsory"></el-option>
+                <el-option label="专业选修" value="majorElective"></el-option>
+              </el-select>
+              <el-checkbox v-model="filters.hasCapacity" label="仅看有余量"></el-checkbox>
+              <el-button type="primary" size="default" @click="queryLessons">查询</el-button>
+              <el-button size="default" @click="resetFilters">重置</el-button>
+            </div>
+
+            <!-- Course Table -->
+            <el-table :data="filteredLessons" stripe border style="width:100%" max-height="520" highlight-current-row>
+              <el-table-column label="操作" width="90" fixed="left">
+                <template #default="{row}">
+                  <el-button v-if="isSelected(row)" type="danger" size="small" text @click="handleDrop(row)">退课</el-button>
+                  <el-button v-else-if="row.stdCount >= row.limitCount" type="info" size="small" disabled>已满</el-button>
+                  <el-button v-else type="primary" size="small" text @click="handleSelect(row)">选课</el-button>
+                </template>
+              </el-table-column>
+              <el-table-column label="选课状态" width="100">
+                <template #default="{row}">
+                  <el-tag v-if="isSelected(row) && isPinned(row)" type="success" size="small">已选中</el-tag>
+                  <el-tag v-else-if="isSelected(row) && !isPinned(row)" type="warning" size="small">待筛选</el-tag>
+                  <div v-else-if="row.stdCount >= row.limitCount">
+                    <el-tag type="info" size="small">未选中</el-tag>
+                    <el-button type="primary" size="small" text @click="openReasonDialog(row)" style="padding:2px 0">原因</el-button>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column label="课程信息" width="220">
+                <template #default="{row}">
+                  <div class="course-info">
+                    <div class="course-code">{{ row.course.code }}</div>
+                    <div class="course-name">
+                      {{ row.course.nameZh }} <span class="credits">{{ row.course.credits }}学分</span>
+                    </div>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column label="教学大纲" width="90">
+                <template #default="{row}">
+                  <a v-if="row.hasTs" href="javascript:;" class="link-btn">教学大纲</a>
+                  <span v-else class="text-muted">暂未上传</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="教学班" width="160">
+                <template #default="{row}">
+                  <div>{{ row.code }}</div>
+                  <div class="text-muted">{{ row.name.nameZh }}</div>
+                </template>
+              </el-table-column>
+              <el-table-column label="授课教师" width="120">
+                <template #default="{row}">
+                  {{ row.teachers.map(t => t.nameZh).join(', ') }}
+                </template>
+              </el-table-column>
+              <el-table-column label="时间地点" min-width="220">
+                <template #default="{row}">
+                  <div>{{ row.campus.nameZh }}</div>
+                  <div v-for="(line, i) in row.dateTimePlace.textZh.split('\n')" :key="i">{{ line }}</div>
+                  <div v-if="row.scheduleRemark" class="text-muted">{{ row.scheduleRemark }}</div>
+                </template>
+              </el-table-column>
+              <el-table-column label="已选/上限" width="130">
+                <template #default="{row}">
+                  <div class="count-cell">
+                    <span :class="{'text-danger': row.stdCount >= row.limitCount}">{{ row.stdCount }}/{{ row.limitCount }}</span>
+                    <el-progress
+                      :percentage="Math.min((row.stdCount/row.limitCount)*100, 100)"
+                      :stroke-width="6"
+                      :show-text="false"
+                      :color="row.stdCount >= row.limitCount ? '#FF6B6B' : '#409EFF'"
+                    ></el-progress>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+
+          <!-- Timetable Tab -->
+          <div v-if="activeTab === 'courseTable'" class="tab-content">
+            <div class="timetable">
+              <table class="tt-table">
+                <thead>
+                  <tr>
+                    <th width="70"></th>
+                    <th v-for="d in 5" :key="d">星期{{ ['一','二','三','四','五'][d-1] }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="pair in timePairs" :key="pair.label">
+                    <td class="tt-time">{{ pair.label }}</td>
+                    <td v-for="d in 5" :key="d"
+                        class="tt-cell"
+                        :class="{
+                          'tt-cell-occupied': getTimetableCell(d, pair.start, pair.end),
+                          'tt-cell-free': !getTimetableCell(d, pair.start, pair.end),
+                          'tt-cell-active': isTtSlotSelected(d, pair.start)
+                        }"
+                        @click="onTimetableSlotClick(d, pair.start, pair.end)">
+                      <div v-if="getTimetableCell(d, pair.start, pair.end)" class="tt-course-block">
+                        <div class="tt-course-name">{{ getTimetableCell(d, pair.start, pair.end).course.nameZh }}</div>
+                        <div class="tt-teacher">{{ getTimetableCell(d, pair.start, pair.end).teachers.map(t=>t.nameZh).join(',') }}</div>
+                        <div class="tt-room">{{ getTimetableCellRoom(d, pair.start, pair.end) }}</div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="tt-legend">
+                <span class="tt-legend-item"><span class="tt-legend-color tt-legend-occupied"></span>已选课程</span>
+                <span class="tt-legend-item"><span class="tt-legend-color tt-legend-selected"></span>已选中查看</span>
+              </div>
+            </div>
+
+            <!-- Slot Course List -->
+            <div v-if="ttSelectedSlots.length > 0" class="tt-slot-courses">
+              <div class="tt-slot-title">
+                <span>
+                  已选时段：
+                  <el-tag v-for="(slot, i) in ttSelectedSlots" :key="i" size="small" closable @close="removeTtSlot(i)" style="margin-right:6px;">
+                    星期{{ ['一','二','三','四','五'][slot.weekday-1] }} 第{{ slot.start }}-{{ slot.end }}节
+                  </el-tag>
+                  （共{{ ttSlotLessons.length }}门可选）
+                </span>
+                <el-button text type="info" size="small" @click="clearTtSlots">清除选择</el-button>
+              </div>
+              <el-table :data="ttSlotLessons" stripe border style="width:100%" max-height="360">
+                <el-table-column label="操作" width="90" fixed="left">
+                  <template #default="{row}">
+                    <el-button v-if="isSelected(row)" type="danger" size="small" text @click="handleDrop(row)">退课</el-button>
+                    <el-button v-else-if="row.stdCount >= row.limitCount" type="info" size="small" disabled>已满</el-button>
+                    <el-button v-else type="primary" size="small" text @click="handleSelect(row)">选课</el-button>
+                  </template>
+                </el-table-column>
+                <el-table-column label="选课状态" width="85">
+                  <template #default="{row}">
+                    <el-tag v-if="isSelected(row) && isPinned(row)" type="success" size="small">已选中</el-tag>
+                    <el-tag v-else-if="isSelected(row) && !isPinned(row)" type="warning" size="small">待筛选</el-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column label="课程信息" width="200">
+                  <template #default="{row}">
+                    <div class="course-info">
+                      <div class="course-code">{{ row.course.code }}</div>
+                      <div class="course-name">{{ row.course.nameZh }} <span class="credits">{{ row.course.credits }}学分</span></div>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column label="教学班" width="160">
+                  <template #default="{row}">
+                    <div>{{ row.code }}</div>
+                    <div class="text-muted">{{ row.name.nameZh }}</div>
+                  </template>
+                </el-table-column>
+                <el-table-column label="授课教师" width="120">
+                  <template #default="{row}">
+                    {{ row.teachers.map(t => t.nameZh).join(', ') }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="时间地点" min-width="220">
+                  <template #default="{row}">
+                    <div>{{ row.campus.nameZh }}</div>
+                    <div v-for="(line, i) in row.dateTimePlace.textZh.split('\n')" :key="i">{{ line }}</div>
+                  </template>
+                </el-table-column>
+                <el-table-column label="已选/上限" width="130">
+                  <template #default="{row}">
+                    <div class="count-cell">
+                      <span :class="{'text-danger': row.stdCount >= row.limitCount}">{{ row.stdCount }}/{{ row.limitCount }}</span>
+                      <el-progress
+                        :percentage="Math.min((row.stdCount/row.limitCount)*100, 100)"
+                        :stroke-width="6"
+                        :show-text="false"
+                        :color="row.stdCount >= row.limitCount ? '#FF6B6B' : '#409EFF'"
+                      ></el-progress>
+                    </div>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </div>
+
+          <!-- Selected Lessons Tab -->
+          <div v-if="activeTab === 'selectedLesson'" class="tab-content">
+            <div class="selected-summary">
+              本学期已选学分：{{ status.semesterCreditActual }}
+              <span style="margin-left:20px">意愿值已分配：{{ virtualCost.spent }}/{{ virtualCost.total }}</span>
+              <span :style="{marginLeft:'8px', color: vcRemaining < 0 ? '#F56C6C' : '#67C23A'}">剩余 {{ vcRemaining }}</span>
+            </div>
+            <el-table :data="selectedLessons" stripe border style="width:100%">
+              <el-table-column label="操作" width="80">
+                <template #default="{row}">
+                  <el-button type="danger" size="small" text @click="handleDrop(row)">退课</el-button>
+                </template>
+              </el-table-column>
+              <el-table-column label="选课状态" width="85">
+                <template #default="{row}">
+                  <el-tag :type="row.pinned ? 'success' : 'warning'" size="small">{{ row.pinned ? '已选中' : '待筛选' }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="课程信息" width="200">
+                <template #default="{row}">
+                  <div>{{ row.course.code }}</div>
+                  <div>{{ row.course.nameZh }} {{ row.course.credits }}学分</div>
+                </template>
+              </el-table-column>
+              <el-table-column label="教学大纲" width="90">
+                <template #default="{row}">
+                  <a v-if="row.hasTs" href="javascript:;" class="link-btn">教学大纲</a>
+                  <span v-else class="text-muted">暂未上传</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="教学班" width="150">
+                <template #default="{row}">{{ row.code }} {{ row.name.nameZh }}</template>
+              </el-table-column>
+              <el-table-column label="授课教师" width="120">
+                <template #default="{row}">{{ row.teachers.map(t=>t.nameZh).join(', ') }}</template>
+              </el-table-column>
+              <el-table-column label="时间地点" min-width="200">
+                <template #default="{row}">
+                  <div v-for="(line, i) in row.dateTimePlace.textZh.split('\n')" :key="i">{{ line }}</div>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+
+          <!-- Course Review Tab -->
+          <div v-if="activeTab === 'courseReview'" class="tab-content">
+            <!-- Review Filters (same as allLesson) -->
+            <div class="filter-bar">
+              <el-input v-model="reviewFilters.keyword" placeholder="课程名称/代码" clearable size="default" style="width:180px"></el-input>
+              <el-input v-model="reviewFilters.teacher" placeholder="教师" clearable size="default" style="width:120px"></el-input>
+              <el-select v-model="reviewFilters.weekday" placeholder="星期" clearable size="default" style="width:100px">
+                <el-option v-for="d in 5" :key="d" :label="'星期'+['一','二','三','四','五'][d-1]" :value="d"></el-option>
+              </el-select>
+              <el-select v-model="reviewFilters.campus" placeholder="校区" clearable size="default" style="width:120px">
+                <el-option v-for="c in queryCondition.campuses" :key="c.id" :label="c.nameZh" :value="c.id"></el-option>
+              </el-select>
+              <el-select v-model="reviewFilters.courseProperty" placeholder="课程性质" clearable size="default" style="width:130px">
+                <el-option label="公共必修" value="publicCompulsory"></el-option>
+                <el-option label="通识教育" value="generalEducation"></el-option>
+                <el-option label="专业必修" value="majorCompulsory"></el-option>
+                <el-option label="专业选修" value="majorElective"></el-option>
+              </el-select>
+              <el-button type="primary" size="default" @click="filterReviews">查询</el-button>
+              <el-button size="default" @click="resetReviewFilters">重置</el-button>
+            </div>
+
+            <!-- Course Review Table -->
+            <el-table :data="reviewCourseList" stripe border style="width:100%" max-height="520">
+              <el-table-column label="课程信息" min-width="220">
+                <template #default="{row}">
+                  <div class="course-info">
+                    <div class="course-code">{{ row.courseCode }}</div>
+                    <div class="course-name">{{ row.courseName }} <span class="credits">{{ row.credits }}学分</span></div>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column label="授课教师" width="150">
+                <template #default="{row}">{{ row.teacherName }}</template>
+              </el-table-column>
+              <el-table-column label="课程类别" width="120">
+                <template #default="{row}">
+                  <el-tag size="small" :type="{publicCompulsory:'success', generalEducation:'warning', majorCompulsory:'', majorElective:'info'}[row.courseProperty] || ''">
+                    {{ {publicCompulsory:'公共必修', generalEducation:'通识教育', majorCompulsory:'专业必修', majorElective:'专业选修'}[row.courseProperty] || row.courseProperty }}
+                  </el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="平均评分" width="280" sortable :sort-method="(a,b) => a.avgRating - b.avgRating">
+                <template #default="{row}">
+                  <div class="avg-rating-cell">
+                    <el-rate :model-value="row.avgRating" disabled :colors="['#F7BA2A','#F7BA2A','#F7BA2A']" size="small"></el-rate>
+                    <span class="avg-rating-num">{{ row.avgRating.toFixed(1) }}</span>
+                    <span class="review-count-tag">{{ row.reviewCount }}条</span>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="180">
+                <template #default="{row}">
+                  <el-button type="primary" size="small" text @click="openReviewDetail(row)">查看评价</el-button>
+                  <el-button type="success" size="small" text @click="openAddReviewFor(row)">发布评价</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Course Drawer -->
+    <el-drawer v-model="drawerVisible" :title="drawerCourse?.nameZh + ' - 可选教学班'" size="60%" direction="rtl">
+      <el-table :data="drawerLessons" stripe border>
+        <el-table-column label="操作" width="80">
+          <template #default="{row}">
+            <el-button v-if="isSelected(row)" type="danger" size="small" text @click="handleDrop(row)">退课</el-button>
+            <el-button v-else-if="row.stdCount >= row.limitCount" type="danger" size="small" disabled>已满</el-button>
+            <el-button v-else type="primary" size="small" text @click="handleSelect(row)">选课</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column label="选课状态" width="85">
+          <template #default="{row}">
+            <el-tag v-if="isSelected(row) && isPinned(row)" type="success" size="small">已选中</el-tag>
+            <el-tag v-else-if="isSelected(row)" type="warning" size="small">待筛选</el-tag>
+            <el-tag v-else type="info" size="small">未选</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="教学班" width="160">
+          <template #default="{row}">
+            <div>{{ row.code }}</div>
+            <div class="text-muted">{{ row.name.nameZh }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="授课教师" width="110">
+          <template #default="{row}">{{ row.teachers.map(t=>t.nameZh).join(', ') }}</template>
+        </el-table-column>
+        <el-table-column label="时间地点" min-width="200">
+          <template #default="{row}">
+            <div>{{ row.campus.nameZh }}</div>
+            <div v-for="(line,i) in row.dateTimePlace.textZh.split('\n')" :key="i">{{ line }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="已选/上限" width="130">
+          <template #default="{row}">
+            <div class="count-cell">
+              <span :class="{'text-danger': row.stdCount>=row.limitCount}">{{ row.stdCount }}/{{ row.limitCount }}</span>
+              <el-progress :percentage="Math.min((row.stdCount/row.limitCount)*100,100)" :stroke-width="6" :show-text="false" :color="row.stdCount>=row.limitCount?'#FF6B6B':'#409EFF'"></el-progress>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-drawer>
+
+    <!-- Select Result Dialog -->
+    <el-dialog v-model="resultDialogVisible" title="选课结果" width="400px" :close-on-click-modal="false" center>
+      <div class="result-dialog-body">
+        <div v-if="resultLoading" class="result-loading">
+          <el-icon class="is-loading" :size="40"><Loading /></el-icon>
+          <p>系统正在处理中，请勿离开本页面!</p>
+        </div>
+        <div v-else>
+          <div v-if="resultSuccess" class="result-success">
+            <el-icon :size="48" color="#67C23A"><circle-check /></el-icon>
+            <p>{{ resultMessage }}</p>
+          </div>
+          <div v-else class="result-fail">
+            <el-icon :size="48" color="#FF6B6B"><circle-close /></el-icon>
+            <p>{{ resultMessage }}</p>
+          </div>
+        </div>
+      </div>
+      <template #footer>
+        <el-button @click="resultDialogVisible = false" :disabled="resultLoading">关闭</el-button>
+        <el-button v-if="resultSuccess && !resultLoading" type="primary" @click="resultDialogVisible = false">继续选课</el-button>
+      </template>
+    </el-dialog>
+
+    <!-- Drop Confirm Dialog -->
+    <el-dialog v-model="dropDialogVisible" title="确认退课" width="380px" center>
+      <p>确认退掉「{{ dropTarget?.course?.nameZh }}」吗？</p>
+      <template #footer>
+        <el-button @click="dropDialogVisible = false">取消</el-button>
+        <el-button type="danger" @click="confirmDrop">确定</el-button>
+      </template>
+    </el-dialog>
+
+    <!-- Select Confirm Dialog (with VC input) -->
+    <el-dialog v-model="selectDialogVisible" title="选课确认" width="440px" :close-on-click-modal="false" center>
+      <div v-if="selectTarget" style="text-align:center">
+        <div style="font-size:16px;font-weight:600;color:#303133;margin-bottom:4px">{{ selectTarget.course.nameZh }}</div>
+        <div style="font-size:13px;color:#909399;margin-bottom:16px">
+          {{ selectTarget.course.code }} · {{ selectTarget.course.credits }}学分 · {{ selectTarget.teachers.map(t => t.nameZh).join(', ') }}
+        </div>
+        <div style="margin-bottom:8px;font-size:14px;color:#303133">请填写投入的意愿值</div>
+        <el-input-number v-model="selectVcInput" :min="0" :max="virtualCost.total" :step="5" size="default" class="vc-sim-input" style="width:160px"></el-input-number>
+        <div style="margin-top:10px;font-size:13px;color:#909399">
+          剩余可用意愿值：
+          <span :style="{ fontWeight: 700, color: vcRemaining < 0 ? '#F56C6C' : vcRemaining <= 20 ? '#E6A23C' : '#67C23A' }">{{ vcRemaining }}</span>
+          / {{ virtualCost.total }}
+        </div>
+      </div>
+      <template #footer>
+        <el-button @click="selectDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="confirmSelect">确认选课</el-button>
+      </template>
+    </el-dialog>
+
+    <!-- Reject Confirm Dialog (P0-5) -->
+    <el-dialog v-model="rejectDialogVisible" title="退选确认" width="400px" center>
+      <p>确认退选「{{ rejectTarget?.course?.nameZh }}」吗？退选后本轮将无法再次选择该课程。</p>
+      <template #footer>
+        <el-button @click="rejectDialogVisible = false">取消</el-button>
+        <el-button type="danger" @click="confirmReject">确认退选</el-button>
+      </template>
+    </el-dialog>
+
+    <!-- Bulletin Dialog -->
+    <el-dialog v-model="bulletinDialogVisible" title="选课公告" width="600px">
+      <div v-html="bulletinContent"></div>
+    </el-dialog>
+
+    <!-- Rules Dialog -->
+    <el-dialog v-model="rulesDialogVisible" title="选课规则" width="600px">
+      <div v-html="rulesContent"></div>
+    </el-dialog>
+
+    <!-- P0-5: Preselection Confirmation Dialog -->
+    <el-dialog v-model="confirmDialogVisible" title="预选课确认" width="640px" :close-on-click-modal="false">
+      <div class="confirm-deadline-banner">
+        <el-icon><alarm-clock /></el-icon>
+        确认窗口截止倒计时：<span class="countdown">{{ deadlineCountdown }}</span>
+        <span style="margin-left:auto;font-size:12px;color:#909399">逾期未确认的课程将被自动退选</span>
+      </div>
+
+      <div class="confirm-list-header">
+        <div style="font-size:15px;font-weight:600;color:#303133">
+          预选课程列表（共 {{ allConfirmCourses.length }} 门）
+        </div>
+        <div class="confirm-progress-stats">
+          <span><el-icon style="color:#E6A23C"><Warning /></el-icon> 待确认 {{ pendingConfirmCourses.length }}</span>
+          <span><el-icon style="color:#67C23A"><success-filled /></el-icon> 已确认 {{ confirmedCourses.length }}</span>
+          <span><el-icon style="color:#909399"><circle-close-filled /></el-icon> 已退选 {{ rejectedCourses.length }}</span>
+        </div>
+      </div>
+
+      <el-progress
+        :percentage="allConfirmCourses.length ? ((confirmedCourses.length + rejectedCourses.length) / allConfirmCourses.length * 100) : 0"
+        :stroke-width="8"
+        style="margin-bottom:16px"
+      ></el-progress>
+
+      <div style="max-height:50vh;overflow-y:auto">
+        <div v-for="c in allConfirmCourses" :key="c.id"
+             class="confirm-course-card"
+             :class="{ wait: c.confirmStatus === 'WAIT_CONFIRM', done: c.confirmStatus === 'CONFIRMED', rejected: c.confirmStatus === 'REJECTED' }">
+          <div class="confirm-course-top">
+            <div class="confirm-course-info">
+              <div class="confirm-course-name">{{ c.course.nameZh }}</div>
+              <div class="confirm-course-code">{{ c.course.code }} · {{ c.code }}</div>
+            </div>
+            <div class="confirm-course-actions">
+              <div v-if="c.confirmStatus === 'WAIT_CONFIRM'">
+                <el-button type="primary" size="small" @click="confirmCourse(c)">
+                  <el-icon><Check /></el-icon> 确认选课
+                </el-button>
+                <el-button type="danger" size="small" plain @click="rejectCourse(c)">退选</el-button>
+              </div>
+              <el-tag v-else :type="getConfirmStatus(c.confirmStatus).type" size="small">
+                {{ getConfirmStatus(c.confirmStatus).text }}
+              </el-tag>
+            </div>
+          </div>
+          <div class="confirm-course-meta">
+            <span>{{ c.course.credits }} 学分</span>
+            <span>{{ c.teachers.map(t => t.nameZh).join(', ') }}</span>
+            <span>{{ c.campus.nameZh }}</span>
+            <span v-if="c.virtualCostUsed">意愿值 {{ c.virtualCostUsed }}</span>
+          </div>
+          <div class="confirm-course-meta" style="color:#909399">
+            {{ c.dateTimePlace.textZh.replace(/\n/g, ' | ') }}
+          </div>
+          <div class="confirm-status-explain">
+            <el-icon style="vertical-align:-2px"><info-filled /></el-icon>
+            {{ getConfirmStatus(c.confirmStatus).desc }}
+          </div>
+        </div>
+      </div>
+    </el-dialog>
+
+    <!-- P1-6: Virtual Cost Guide Dialog -->
+    <el-dialog v-model="guideDialogVisible" title="意愿值规则与策略向导" width="720px" :close-on-click-modal="false">
+      <el-tabs v-model="activeGuideTab">
+        <el-tab-pane label="规则说明" name="rules">
+          <!-- Visual flow diagram -->
+          <div class="vc-flow-diagram">
+            <div v-for="(rule, i) in vcRules" :key="i" class="vc-flow-step">
+              <div class="vc-flow-content">
+                <div class="vc-flow-icon"><el-icon><component :is="rule.icon"></component></el-icon></div>
+                <div class="vc-flow-title">{{ rule.title }}</div>
+                <div class="vc-flow-desc">{{ rule.desc }}</div>
+              </div>
+              <div v-if="i < vcRules.length - 1" class="vc-flow-arrow">
+                <el-icon><arrow-right /></el-icon>
+              </div>
+            </div>
+          </div>
+          <!-- Strategy tips -->
+          <div class="vc-strategy-section">
+            <div class="vc-strategy-title">
+              <el-icon><Opportunity /></el-icon> 三种常见策略
+            </div>
+            <div class="vc-strategy-cards">
+              <div v-for="tip in vcStrategyTips" :key="tip.label" class="vc-strategy-card">
+                <div class="vc-strategy-icon" :style="{ background: tip.color }">
+                  <el-icon><component :is="tip.icon"></component></el-icon>
+                </div>
+                <div class="vc-strategy-label">{{ tip.label }}</div>
+                <div class="vc-strategy-desc">{{ tip.desc }}</div>
+              </div>
+            </div>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="模拟分配" name="simulator">
+          <div class="vc-sim-header">
+            <div class="vc-sim-budget">
+              剩余可分配：
+              <span class="num" :class="{ ok: vcSimRemaining > 20, warn: vcSimRemaining > 0 && vcSimRemaining <= 20, over: vcSimRemaining < 0 }">{{ vcSimRemaining }}</span>
+              <span> / {{ virtualCost.total || 100 }}</span>
+            </div>
+            <div class="vc-sim-presets">
+              <el-button size="small" @click="vcApplyPreset('balanced')">均衡分配</el-button>
+              <el-button size="small" @click="vcApplyPreset('aggressive')">冒险集中</el-button>
+              <el-button size="small" @click="vcApplyPreset('conservative')">保守优选</el-button>
+            </div>
+          </div>
+
+          <!-- Course search / add -->
+          <div class="vc-sim-add-bar">
+            <el-input v-model="vcCourseSearchQuery" placeholder="搜索课程名称/代码/教师，添加到模拟列表" clearable size="small" style="flex:1"
+                      @focus="vcCourseSearchVisible = true">
+              <template #prefix><el-icon><Search /></el-icon></template>
+            </el-input>
+            <span class="vc-sim-count">{{ vcSimCourses.length }} / 10 门</span>
+          </div>
+          <!-- Search dropdown -->
+          <div v-if="vcCourseSearchVisible && vcCourseSearchQuery.trim() && vcSearchResults.length > 0" class="vc-search-dropdown">
+            <div v-for="r in vcSearchResults" :key="r.id" class="vc-search-item" @click="vcAddSimCourse(r)">
+              <div>
+                <span class="vc-search-name">{{ r.course.nameZh }}</span>
+                <span class="vc-search-code">{{ r.course.code }}</span>
+              </div>
+              <div class="vc-search-meta">{{ r.teachers.map(t => t.nameZh).join(', ') }} · {{ r.stdCount }}/{{ r.limitCount }}人</div>
+            </div>
+          </div>
+          <div v-if="vcCourseSearchVisible && vcCourseSearchQuery.trim() && vcSearchResults.length === 0" class="vc-search-dropdown">
+            <div class="vc-search-empty">未找到匹配课程</div>
+          </div>
+
+          <div class="vc-sim-list">
+            <div v-for="(c, idx) in vcSimCourses" :key="c.lessonId" class="vc-sim-item">
+              <div class="vc-sim-info">
+                <div class="vc-sim-name">{{ c.name }}</div>
+                <div class="vc-sim-meta">{{ c.code }} · {{ c.credits }}学分 · {{ c.teacher }} · 报名率{{ Math.round(c.stdCount / c.limitCount * 100) }}%</div>
+              </div>
+              <el-input-number v-model="c.cost" :min="0" :max="100" :step="5" size="small" class="vc-sim-input"></el-input-number>
+              <div class="vc-sim-prob" :class="{ high: vcEstimate(c) >= 70, mid: vcEstimate(c) >= 40 && vcEstimate(c) < 70, low: vcEstimate(c) < 40 }">
+                <template v-if="c.cost > 0">{{ vcEstimate(c) }}%<div class="vc-prob-label">{{ vcGetProbLabel(vcEstimate(c)) }}</div></template>
+                <template v-else>-</template>
+              </div>
+              <el-button type="danger" size="small" text circle @click="vcRemoveSimCourse(idx)" title="移除">
+                <el-icon><Close /></el-icon>
+              </el-button>
+            </div>
+            <div v-if="vcSimCourses.length === 0" class="vc-sim-empty">
+              <el-icon :size="32" color="#C0C4CC"><document-add /></el-icon>
+              <div>请通过上方搜索框添加想要模拟的课程</div>
+            </div>
+          </div>
+          <div class="vc-sim-footer">
+            <div class="vc-sim-note">
+              <el-icon><info-filled /></el-icon> 概率为基于往年数据的估算，仅供参考
+              <template v-if="vcDraftTimestamp">
+                · 上次保存：{{ vcDraftTimestamp }}
+              </template>
+            </div>
+            <div style="display:flex;gap:8px">
+              <el-button size="small" @click="vcClearDraft">清除</el-button>
+              <el-button size="small" @click="vcRestoreDraft" v-if="vcSavedDraft">恢复草稿</el-button>
+              <el-button type="primary" size="small" @click="vcSaveDraft">保存草稿</el-button>
+              <el-button type="success" size="small" @click="applySimToSelect">一键应用选课</el-button>
+            </div>
+          </div>
+          <!-- Probability legend -->
+          <div class="vc-prob-legend">
+            <span class="vc-prob-legend-item"><span class="vc-prob-dot high"></span>较大 ( ≥ 70%)</span>
+            <span class="vc-prob-legend-item"><span class="vc-prob-dot mid"></span>一般 (40-69%)</span>
+            <span class="vc-prob-legend-item"><span class="vc-prob-dot low"></span>较小 ( < 40%) </span>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+    </el-dialog>
+
+    <!-- P1-7: Unselected Reason Dialog -->
+    <el-dialog v-model="reasonDialogVisible" title="未选中原因分析" width="600px">
+      <div v-if="reasonTarget">
+        <div class="ur-course-header">
+          <div>
+            <div class="ur-course-name">{{ reasonTarget.course.nameZh }}</div>
+            <div class="ur-course-meta">{{ reasonTarget.course.code }} · {{ reasonTarget.course.credits }}学分 · {{ reasonTarget.stdCount }}/{{ reasonTarget.limitCount }}人</div>
+          </div>
+          <div class="ur-header-right">
+            <el-tag :type="isRealData ? 'success' : 'info'" size="small">
+              {{ isRealData ? '基于筛选日志' : '基于规则推测' }}
+            </el-tag>
+            <el-tag type="danger" size="small">未选中</el-tag>
+          </div>
+        </div>
+        <div class="ur-reason-list">
+          <div v-for="(r, i) in currentReasons" :key="i" class="ur-reason-card">
+            <div class="ur-reason-icon" :style="{ background: r.color }">
+              <el-icon><component :is="r.icon"></component></el-icon>
+            </div>
+            <div class="ur-reason-body">
+              <div class="ur-reason-head">
+                <span class="ur-reason-title">{{ r.title }}</span>
+                <el-tag :type="getReasonTag(r.type).type" size="small">{{ getReasonTag(r.type).label }}</el-tag>
+              </div>
+              <div class="ur-reason-desc">{{ r.desc }}</div>
+              <div v-if="r.suggestion" class="ur-reason-suggestion">
+                <el-icon><Promotion /></el-icon> {{ r.suggestion }}
+              </div>
+              <div v-if="r.action === 'vcGuide' || r.type === 'virtualCost'" class="ur-reason-action">
+                <el-button type="primary" size="small" text @click="openVcGuideFromReason">
+                  <el-icon><Compass /></el-icon> 打开意愿值策略向导
+                </el-button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alternative lessons -->
+        <div v-if="alternativeLessons.length > 0" class="ur-alternatives">
+          <div class="ur-alternatives-title">
+            <el-icon><Switch /></el-icon> 同课程其他可选教学班
+          </div>
+          <div class="ur-alt-list">
+            <div v-for="alt in alternativeLessons" :key="alt.id" class="ur-alt-item">
+              <div class="ur-alt-info">
+                <span class="ur-alt-name">{{ alt.code }} {{ alt.name?.nameZh }}</span>
+                <span class="ur-alt-meta">{{ alt.teachers.map(t => t.nameZh).join(', ') }}</span>
+              </div>
+              <div class="ur-alt-capacity">
+                <span :class="{'text-danger': alt.stdCount >= alt.limitCount}">{{ alt.stdCount }}/{{ alt.limitCount }}</span>
+              </div>
+              <el-button v-if="alt.stdCount < alt.limitCount" type="primary" size="small" text @click="reasonDialogVisible = false; handleSelect(alt)">选课</el-button>
+              <el-tag v-else type="info" size="small">已满</el-tag>
+            </div>
+          </div>
+        </div>
+
+        <div class="ur-disclaimer">
+          <el-icon><warning-filled /></el-icon>
+          <span v-if="isRealData">以上分析基于系统筛选日志。如有疑问请通过"问题反馈"提交工单。</span>
+          <span v-else>以上分析基于系统规则推测，仅供参考。如有疑问请通过"问题反馈"提交工单。</span>
+        </div>
+      </div>
+    </el-dialog>
+
+    <!-- P1-8: Feedback Dialog -->
+    <el-dialog v-model="feedbackDialogVisible" title="问题反馈" width="640px" :close-on-click-modal="false">
+      <el-tabs v-model="feedbackTab">
+        <el-tab-pane label="提交工单" name="submit">
+          <el-form :model="fbNewTicket" label-position="top" class="fb-submit-form">
+            <el-form-item label="问题类型" required>
+              <el-select v-model="fbNewTicket.type" placeholder="请选择问题类型" style="width:100%">
+                <el-option v-for="t in fbTicketTypes" :key="t.value" :label="t.label" :value="t.value"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="问题描述" required>
+              <el-input v-model="fbNewTicket.description" type="textarea" :rows="4" placeholder="请详细描述您遇到的问题（至少5个字）" maxlength="500" show-word-limit></el-input>
+            </el-form-item>
+            <el-form-item label="截图（可选）">
+              <el-upload action="#" :auto-upload="false" :on-change="fbHandleScreenshot" :limit="1" accept="image/jpeg,image/png">
+                <el-button size="small" type="info" plain><el-icon><Upload /></el-icon> 上传截图</el-button>
+              </el-upload>
+              <div class="fb-upload-tip">支持 JPG/PNG 格式，大小不超过 5MB</div>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" :disabled="!fbCanSubmit" @click="fbSubmitTicket" style="width:100%">提交工单</el-button>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+        <el-tab-pane name="list">
+          <template #label>
+            我的工单
+            <el-badge v-if="fbUnreadCount > 0" :value="fbUnreadCount" :max="9" class="fb-tab-badge" />
+          </template>
+          <div v-if="fbTickets.length === 0" class="fb-ticket-empty">暂无工单记录</div>
+          <div v-else class="fb-ticket-list">
+            <div v-for="ticket in fbTickets" :key="ticket.id" class="fb-ticket-card" @click="fbOpenDetail(ticket)">
+              <div class="fb-ticket-info">
+                <div class="fb-ticket-title">
+                  <el-tag :type="fbGetStatus(ticket.status).type" size="small">{{ fbGetStatus(ticket.status).text }}</el-tag>
+                  {{ ticket.typeLabel }}
+                  <span v-if="ticket.replies && ticket.replies.length > 0 && ticket.replies[ticket.replies.length-1].from === 'staff' && !ticket._read" class="fb-new-reply-dot"></span>
+                </div>
+                <div class="fb-ticket-desc">{{ ticket.description }}</div>
+              </div>
+              <div class="fb-ticket-right">
+                <div class="fb-ticket-time">{{ ticket.createdAt }}</div>
+                <div v-if="ticket.replies && ticket.replies.length > 0" class="fb-ticket-reply-count">
+                  <el-icon><chat-dot-square /></el-icon> {{ ticket.replies.length }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+    </el-dialog>
+
+    <!-- P1-8: Ticket Detail Dialog -->
+    <el-dialog v-model="fbTicketDetailVisible" title="工单详情" width="580px">
+      <div v-if="fbTicketDetail">
+        <div class="fb-detail-header">
+          <div class="fb-detail-title">
+            <el-tag :type="fbGetStatus(fbTicketDetail.status).type" size="small">{{ fbGetStatus(fbTicketDetail.status).text }}</el-tag>
+            {{ fbTicketDetail.typeLabel }} · {{ fbTicketDetail.id }}
+          </div>
+          <div class="fb-detail-meta">
+            <span>提交时间：{{ fbTicketDetail.createdAt }}</span>
+            <span v-if="fbTicketDetail.hasScreenshot"><el-icon><Picture /></el-icon> 含截图</span>
+          </div>
+        </div>
+
+        <!-- Status timeline -->
+        <div class="fb-status-timeline">
+          <div v-for="(step, i) in fbTicketTimeline" :key="i"
+               class="fb-timeline-step" :class="{ done: step.done, current: step.done && (i === fbTicketTimeline.length - 1 || !fbTicketTimeline[i+1]?.done) }">
+            <div class="fb-timeline-dot"></div>
+            <div class="fb-timeline-label">{{ step.label }}</div>
+            <div class="fb-timeline-time">{{ step.time }}</div>
+            <div v-if="i < fbTicketTimeline.length - 1" class="fb-timeline-line"></div>
+          </div>
+        </div>
+
+        <div class="fb-detail-desc">{{ fbTicketDetail.description }}</div>
+
+        <div v-if="fbTicketDetail.replies.length > 0">
+          <div style="font-size:14px;font-weight:600;color:#303133;margin-bottom:10px">回复记录</div>
+          <div class="fb-reply-list">
+            <div v-for="(reply, i) in fbTicketDetail.replies" :key="i" class="fb-reply-card" :class="reply.from">
+              <div class="fb-reply-head">
+                <span class="fb-reply-name" :class="reply.from">{{ reply.name }}</span>
+                <span>{{ reply.time }}</span>
+              </div>
+              <div>{{ reply.content }}</div>
+            </div>
+          </div>
+        </div>
+        <div v-else style="text-align:center;padding:20px 0;color:#909399">暂无回复，我们会尽快处理</div>
+
+        <!-- User reply input -->
+        <div v-if="fbTicketDetail.status !== 'closed'" class="fb-reply-input">
+          <el-input v-model="fbReplyContent" type="textarea" :rows="2" placeholder="输入回复内容..." maxlength="300" show-word-limit></el-input>
+          <el-button type="primary" size="small" :disabled="!fbCanReply" @click="fbSubmitReply" style="margin-top:8px;float:right">
+            <el-icon><Promotion /></el-icon> 发送回复
+          </el-button>
+          <div style="clear:both"></div>
+        </div>
+        <div v-else class="fb-closed-notice">
+          <el-icon><Lock /></el-icon> 该工单已关闭，无法继续回复
+        </div>
+      </div>
+    </el-dialog>
+    <el-dialog v-model="addReviewDialogVisible" title="发布课程评价" width="520px" :close-on-click-modal="false">
+      <el-form :model="newReview" label-width="80px" label-position="top">
+        <el-form-item label="评价课程">
+          <div style="font-size:14px;color:#303133;line-height:1.6;">
+            <span style="color:#409EFF;font-weight:600;">{{ newReview.courseCode }}</span>
+            <span style="margin-left:6px;">{{ newReview.courseName }}</span>
+            <span style="margin-left:12px;color:#909399;">{{ newReview.teacherName }}</span>
+          </div>
+        </el-form-item>
+        <el-form-item label="评分" required>
+          <el-rate v-model="newReview.rating" :colors="['#F7BA2A','#F7BA2A','#FF9900']" show-text :texts="['很差','较差','一般','较好','很好']" size="large"></el-rate>
+        </el-form-item>
+        <el-form-item label="评价内容" required>
+          <el-input
+            v-model="newReview.content"
+            type="textarea"
+            :rows="4"
+            placeholder="请输入评价内容（150字以内）"
+            maxlength="150"
+            show-word-limit
+          ></el-input>
+        </el-form-item>
+        <div class="review-form-tip">
+          <el-icon><info-filled /></el-icon>
+          <span>评价将以匿名方式发布，请客观公正地评价课程。</span>
+        </div>
+      </el-form>
+      <template #footer>
+        <el-button @click="addReviewDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="submitReview" :disabled="!canSubmitReview">发布评价</el-button>
+      </template>
+    </el-dialog>
+
+    <!-- Review Detail Dialog -->
+    <el-dialog v-model="reviewDetailVisible" :title="reviewDetailTitle" width="680px" top="5vh">
+      <div class="review-detail-header">
+        <div class="review-detail-avg">
+          <span class="avg-big">{{ reviewDetailAvg.toFixed(1) }}</span>
+          <el-rate :model-value="reviewDetailAvg" disabled :colors="['#F7BA2A','#F7BA2A','#F7BA2A']" size="small"></el-rate>
+          <span class="avg-count">{{ reviewDetailList.length }} 条评价</span>
+        </div>
+        <div class="review-detail-sort">
+          <el-radio-group v-model="reviewDetailSort" size="small">
+            <el-radio-button value="newest">最新</el-radio-button>
+            <el-radio-button value="highest">最高评分</el-radio-button>
+            <el-radio-button value="mostLiked">最多赞同</el-radio-button>
+          </el-radio-group>
+        </div>
+      </div>
+      <div class="review-detail-list" style="max-height:55vh; overflow-y:auto;">
+        <div v-if="sortedDetailReviews.length === 0" style="text-align:center;padding:40px 0;color:#909399;">暂无评价</div>
+        <div v-for="review in sortedDetailReviews" :key="review.id" class="review-card">
+          <div class="review-header">
+            <div class="review-rating">
+              <el-rate :model-value="review.rating" disabled :colors="['#F7BA2A','#F7BA2A','#F7BA2A']" size="small"></el-rate>
+              <span class="rating-num">{{ review.rating }}.0</span>
+            </div>
+          </div>
+          <div class="review-body">
+            <p class="review-content">{{ review.content }}</p>
+          </div>
+          <div class="review-footer">
+            <span class="review-time">{{ review.time }}</span>
+            <span class="review-anonymous">匿名用户</span>
+            <div class="review-actions">
+              <span class="vote-btn" :class="{'vote-active-up': review.myVote === 'up'}" @click="voteReview(review, 'up')">赞同（{{ review.upCount }}）</span>
+              <span class="vote-divider">|</span>
+              <span class="vote-btn" :class="{'vote-active-down': review.myVote === 'down'}" @click="voteReview(review, 'down')">反对（{{ review.downCount }}）</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://unpkg.com/element-plus"></script>
+  <script src="https://unpkg.com/@element-plus/icons-vue"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/course-select.js"></script>
+  <script src="js/review.js"></script>
+  <script src="js/timeline.js"></script>
+  <script src="js/system-status.js"></script>
+  <script src="js/confirm-remind.js"></script>
+  <script src="js/virtual-cost-guide.js"></script>
+  <script src="js/unselected-reason.js"></script>
+  <script src="js/feedback.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
