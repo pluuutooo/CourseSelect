@@ -174,3 +174,77 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Ne
 .vote-divider { color: #DCDFE6; font-size: 12px; margin: 0 4px; }
 .vote-active-up { color: #409EFF; font-weight: 500; }
 .vote-active-down { color: #F56C6C; font-weight: 500; }
+
+/* ===== v2 新增样式 ===== */
+
+/* 评教前置条件 Banner (HTA 1.4) */
+.eval-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fdf6ec;
+  border: 1px solid #f5dab1;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+}
+.eval-banner-body { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.eval-banner-title { font-weight: 500; color: #e6a23c; font-size: 14px; }
+.eval-banner-desc { font-size: 12px; color: #606266; }
+.eval-banner-actions { display: flex; gap: 6px; align-items: center; }
+
+/* 结果公布 Banner (HTA 5.1) */
+.result-ready-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f0f9eb;
+  border: 1px solid #b3e19d;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.result-ready-banner:hover { background: #e1f3d8; }
+
+/* 竞争热度标签 (HTA 2.2) */
+.course-name-link {
+  color: #409eff;
+  text-decoration: none;
+  font-weight: 500;
+}
+.course-name-link:hover { text-decoration: underline; }
+
+/* 课程详情抽屉 (HTA 1.3) */
+.course-detail-drawer { padding: 4px 0; }
+.cdd-header { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+.cdd-code { font-size: 13px; color: #909399; font-family: monospace; }
+.cdd-section { margin-bottom: 16px; }
+.cdd-label {
+  font-size: 12px;
+  color: #909399;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  margin-bottom: 4px;
+}
+.cdd-value { font-size: 14px; color: #303133; line-height: 1.6; }
+.cdd-syllabus {
+  background: #f5f7fa;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: #606266;
+  line-height: 1.7;
+}
+
+/* 提交状态 (HTA 4.3-4.4) */
+.submit-confirmed-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #67c23a;
+  font-weight: 500;
+}

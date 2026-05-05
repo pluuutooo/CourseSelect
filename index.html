@@ -167,6 +167,29 @@
         </div>
       </div>
 
+      <!-- v2: Evaluation pre-check banner (HTA 1.4) -->
+      <div v-if="showEvaluationBanner" class="eval-banner">
+        <el-icon style="font-size:18px;color:#E6A23C"><Warning /></el-icon>
+        <div class="eval-banner-body">
+          <span class="eval-banner-title">您尚未完成本学期评教</span>
+          <span class="eval-banner-desc">未完成评教将无法在教务系统中提交选课，请尽快前往完成</span>
+        </div>
+        <div class="eval-banner-actions">
+          <el-button type="warning" size="small" @click="goToEvaluation">立即前往评教</el-button>
+          <el-button size="small" text @click="dismissEvaluationBanner">稍后提醒</el-button>
+        </div>
+      </div>
+
+      <!-- v2: Result ready banner (HTA 5.1) -->
+      <div v-if="resultReady.ready" class="result-ready-banner" @click="enterSelect(resultReady.turn)">
+        <el-icon style="font-size:18px;color:#67C23A"><SuccessFilled /></el-icon>
+        <div style="flex:1">
+          <span style="font-weight:500">「{{ resultReady.turn?.nameZh }}」选课结果已公布</span>
+          <span style="font-size:12px;color:#606266;margin-left:8px">点击查看已选 / 未选课程</span>
+        </div>
+        <el-icon><ArrowRight /></el-icon>
+      </div>
+
       <!-- P0-5: Graduate preselection confirmation reminder -->
       <div v-if="showConfirmReminder" class="confirm-reminder-card" @click="openConfirmDialog">
         <div class="confirm-reminder-icon"><el-icon><Bell /></el-icon></div>
@@ -421,16 +444,32 @@
 
             <!-- Course Table -->
             <el-table :data="filteredLessons" stripe border style="width:100%" max-height="520" highlight-current-row>
-              <el-table-column label="操作" width="90" fixed="left">
+              <el-table-column label="操作" width="120" fixed="left">
                 <template #default="{row}">
                   <el-button v-if="isSelected(row)" type="danger" size="small" text @click="handleDrop(row)">退课</el-button>
                   <el-button v-else-if="row.stdCount >= row.limitCount" type="info" size="small" disabled>已满</el-button>
                   <el-button v-else type="primary" size="small" text @click="handleSelect(row)">选课</el-button>
+                  <!-- v2: Watch button (用例2) -->
+                  <el-button
+                    size="small" text
+                    :type="isWatched(row) ? 'warning' : ''"
+                    :title="isWatched(row) ? '取消关注' : '关注名额变动'"
+                    @click="toggleWatch(row)"
+                    style="padding:2px 4px"
+                  ><el-icon><Bell /></el-icon></el-button>
                 </template>
               </el-table-column>
               <el-table-column label="选课状态" width="100">
                 <template #default="{row}">
-                  <el-tag v-if="isSelected(row) && isPinned(row)" type="success" size="small">已选中</el-tag>
+                  <!-- v2: show submit countdown if within revoke window (HTA 4.3-4.4) -->
+                  <template v-if="getSubmitStatus(row.id)?.status === 'success'">
+                    <el-tag type="success" size="small">已提交 ✓</el-tag>
+                    <div style="font-size:11px;color:#E6A23C;margin-top:2px">
+                      {{ getSubmitStatus(row.id).countdown }}s 内可撤销
+                      <el-button size="small" text type="warning" @click="cancelSubmit(row)" style="padding:0 2px">撤销</el-button>
+                    </div>
+                  </template>
+                  <el-tag v-else-if="isSelected(row) && isPinned(row)" type="success" size="small">已选中</el-tag>
                   <el-tag v-else-if="isSelected(row) && !isPinned(row)" type="warning" size="small">待筛选</el-tag>
                   <div v-else-if="row.stdCount >= row.limitCount">
                     <el-tag type="info" size="small">未选中</el-tag>
@@ -438,19 +477,28 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column label="课程信息" width="220">
+              <el-table-column label="课程信息" width="230">
                 <template #default="{row}">
                   <div class="course-info">
                     <div class="course-code">{{ row.course.code }}</div>
                     <div class="course-name">
-                      {{ row.course.nameZh }} <span class="credits">{{ row.course.credits }}学分</span>
+                      <!-- v2: clickable course name opens detail drawer (HTA 1.3) -->
+                      <a href="javascript:;" class="course-name-link" @click="openDetailDrawer(row)">{{ row.course.nameZh }}</a>
+                      <span class="credits">{{ row.course.credits }}学分</span>
                     </div>
+                    <!-- v2: heat badge (HTA 2.2) -->
+                    <el-tag
+                      v-if="getHeatLevel(row)"
+                      :type="getHeatLevel(row).type"
+                      size="small"
+                      style="margin-top:2px"
+                    >{{ getHeatLevel(row).label }}</el-tag>
                   </div>
                 </template>
               </el-table-column>
               <el-table-column label="教学大纲" width="90">
                 <template #default="{row}">
-                  <a v-if="row.hasTs" href="javascript:;" class="link-btn">教学大纲</a>
+                  <a v-if="row.hasTs" href="javascript:;" class="link-btn" @click="openDetailDrawer(row)">查看详情</a>
                   <span v-else class="text-muted">暂未上传</span>
                 </template>
               </el-table-column>
@@ -472,7 +520,7 @@
                   <div v-if="row.scheduleRemark" class="text-muted">{{ row.scheduleRemark }}</div>
                 </template>
               </el-table-column>
-              <el-table-column label="已选/上限" width="130">
+              <el-table-column label="已选/上限" width="150">
                 <template #default="{row}">
                   <div class="count-cell">
                     <span :class="{'text-danger': row.stdCount >= row.limitCount}">{{ row.stdCount }}/{{ row.limitCount }}</span>
@@ -482,6 +530,10 @@
                       :show-text="false"
                       :color="row.stdCount >= row.limitCount ? '#FF6B6B' : '#409EFF'"
                     ></el-progress>
+                    <!-- v2: avg winning cost hint (HTA 2.2) -->
+                    <div v-if="row.avgWinningCost" style="font-size:11px;color:#909399;margin-top:2px">
+                      往届均值 {{ row.avgWinningCost }} 分
+                    </div>
                   </div>
                 </template>
               </el-table-column>
@@ -805,6 +857,75 @@
       </template>
     </el-dialog>
 
+    <!-- v2: Conflict dialog (HTA 2.3) -->
+    <el-dialog v-model="conflictDialogVisible" title="检测到时间冲突" width="460px" center :close-on-click-modal="false">
+      <div v-if="conflictTarget && conflictWith" style="text-align:center;padding:8px 0">
+        <el-icon style="font-size:40px;color:#E6A23C"><Warning /></el-icon>
+        <div style="margin-top:12px;font-size:15px;font-weight:500">「{{ conflictTarget.course.nameZh }}」与已选课程冲突</div>
+        <div style="margin-top:6px;color:#606266">
+          与「{{ conflictWith.course.nameZh }}」存在时间重叠，强行选课可能影响到课。
+        </div>
+      </div>
+      <template #footer>
+        <el-button @click="conflictDialogVisible = false">取消</el-button>
+        <el-button type="info" @click="showConflictAlternatives">查看替代班次</el-button>
+        <el-button type="warning" @click="showConflictAndProceed">仍然选择</el-button>
+      </template>
+    </el-dialog>
+
+    <!-- v2: Course detail drawer (HTA 1.3) -->
+    <el-drawer v-model="detailDrawerVisible" :title="detailDrawerLesson ? detailDrawerLesson.course.nameZh + ' 课程详情' : '课程详情'" size="480px" direction="rtl" @close="closeDetailDrawer">
+      <div v-if="detailDrawerLesson" class="course-detail-drawer">
+        <div class="cdd-header">
+          <span class="cdd-code">{{ detailDrawerLesson.course.code }}</span>
+          <el-tag size="small" style="margin-left:8px">{{ detailDrawerLesson.course.credits }} 学分</el-tag>
+          <el-tag v-if="getHeatLevel(detailDrawerLesson)" :type="getHeatLevel(detailDrawerLesson).type" size="small" style="margin-left:4px">{{ getHeatLevel(detailDrawerLesson).label }}</el-tag>
+        </div>
+        <el-divider />
+        <div class="cdd-section" v-if="detailDrawerCourseInfo">
+          <div class="cdd-label">考核方式</div>
+          <div class="cdd-value">{{ detailDrawerCourseInfo.assessment }}</div>
+        </div>
+        <div class="cdd-section" v-if="detailDrawerCourseInfo?.prerequisites?.length">
+          <div class="cdd-label">先修要求</div>
+          <div class="cdd-value">
+            <el-tag v-for="pre in detailDrawerCourseInfo.prerequisites" :key="pre" size="small" type="info" style="margin:2px">{{ pre }}</el-tag>
+          </div>
+        </div>
+        <div class="cdd-section" v-if="detailDrawerCourseInfo?.historyPassRate">
+          <div class="cdd-label">历史通过率</div>
+          <div class="cdd-value">
+            <el-progress :percentage="Math.round(detailDrawerCourseInfo.historyPassRate * 100)" :stroke-width="10" style="width:200px"></el-progress>
+          </div>
+        </div>
+        <div class="cdd-section" v-if="detailDrawerLesson.avgWinningCost">
+          <div class="cdd-label">往届平均中签意愿值</div>
+          <div class="cdd-value"><strong>{{ detailDrawerLesson.avgWinningCost }} 分</strong>（历史报名率 {{ Math.round((detailDrawerLesson.historyCompetitionRate || 0)*100) }}%）</div>
+        </div>
+        <div class="cdd-section" v-if="detailDrawerCourseInfo?.syllabus">
+          <div class="cdd-label">课程大纲摘要</div>
+          <div class="cdd-value cdd-syllabus">{{ detailDrawerCourseInfo.syllabus }}</div>
+        </div>
+        <div class="cdd-section" v-if="detailDrawerCourseInfo?.weekRange">
+          <div class="cdd-label">上课周次</div>
+          <div class="cdd-value">{{ detailDrawerCourseInfo.weekRange }}</div>
+        </div>
+        <div class="cdd-section" v-if="detailDrawerCourseInfo?.statusRemark">
+          <div class="cdd-label">注意事项</div>
+          <div class="cdd-value" style="color:#E6A23C">{{ detailDrawerCourseInfo.statusRemark }}</div>
+        </div>
+        <el-divider />
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <el-button v-if="!isSelected(detailDrawerLesson)" type="primary" @click="handleSelect(detailDrawerLesson); closeDetailDrawer()">选这门课</el-button>
+          <el-button v-else type="danger" plain @click="handleDrop(detailDrawerLesson); closeDetailDrawer()">退课</el-button>
+          <el-button :type="isWatched(detailDrawerLesson) ? 'warning' : ''" plain @click="toggleWatch(detailDrawerLesson)">
+            <el-icon><Bell /></el-icon> {{ isWatched(detailDrawerLesson) ? '已关注' : '关注名额' }}
+          </el-button>
+        </div>
+      </div>
+      <div v-else style="color:#909399;padding:20px">加载中...</div>
+    </el-drawer>
+
     <!-- Bulletin Dialog -->
     <el-dialog v-model="bulletinDialogVisible" title="选课公告" width="600px">
       <div v-html="bulletinContent"></div>
@@ -1023,6 +1144,18 @@
               <div v-if="r.action === 'vcGuide' || r.type === 'virtualCost'" class="ur-reason-action">
                 <el-button type="primary" size="small" text @click="openVcGuideFromReason">
                   <el-icon><Compass /></el-icon> 打开意愿值策略向导
+                </el-button>
+              </div>
+              <!-- v2: nextAction guidance (HTA 5.3) -->
+              <div v-if="r.type === 'nextAction'" class="ur-reason-action" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+                <el-button type="primary" size="small" @click="reasonDialogVisible = false; currentPage='turns'">
+                  <el-icon><ArrowRight /></el-icon> 进入下一轮选课
+                </el-button>
+                <el-button size="small" @click="reasonDialogVisible = false; toggleWatch(reasonTarget)">
+                  <el-icon><Bell /></el-icon> 关注名额变动
+                </el-button>
+                <el-button size="small" text @click="openVcGuideFromReason">
+                  <el-icon><Compass /></el-icon> 意愿值向导
                 </el-button>
               </div>
             </div>

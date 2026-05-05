@@ -48,6 +48,24 @@ function useCourseSelect(loadJSON, allLessons, selectedLessons, status) {
   const drawerVisible = ref(false);
   const drawerCourse = ref(null);
   const drawerLessons = ref([]);
+
+  // v2: Course detail drawer (HTA 1.3)
+  const detailDrawerVisible = ref(false);
+  const detailDrawerLesson = ref(null);
+  const detailDrawerCourseInfo = ref(null);
+  const courseDetailsCache = ref({});
+
+  // v2: Conflict dialog (HTA 2.3)
+  const conflictDialogVisible = ref(false);
+  const conflictTarget = ref(null);
+  const conflictWith = ref(null);
+
+  // v2: Watch/notify list (用例2)
+  const watchedLessonIds = ref(new Set());
+  const watcherTimer = ref(null);
+
+  // v2: Submit status tracking (HTA 4.3-4.4)
+  const submitStatusMap = reactive({}); // lessonId -> { status, countdown, timer }
   const resultDialogVisible = ref(false);
   const resultLoading = ref(false);
   const resultSuccess = ref(false);
@@ -170,8 +188,21 @@ function useCourseSelect(loadJSON, allLessons, selectedLessons, status) {
     const lesson = selectTarget.value;
     if (!lesson) return;
     const vcInput = selectVcInput.value || 0;
-
     selectDialogVisible.value = false;
+
+    // v2: Check conflict BEFORE showing result dialog (HTA 2.3)
+    const conflict = checkTimeConflict(lesson);
+    if (conflict) {
+      conflictTarget.value = lesson;
+      conflictWith.value = conflict;
+      conflictDialogVisible.value = true;
+      return;
+    }
+
+    _doSelect(lesson, vcInput);
+  }
+
+  function _doSelect(lesson, vcInput) {
     resultDialogVisible.value = true;
     resultLoading.value = true;
     resultSuccess.value = false;
@@ -194,11 +225,6 @@ function useCourseSelect(loadJSON, allLessons, selectedLessons, status) {
         resultLoading.value = false; resultSuccess.value = false;
         resultMessage.value = `意愿值不足，当前剩余 ${vcRemaining.value}`; return;
       }
-      const conflict = checkTimeConflict(lesson);
-      if (conflict) {
-        resultLoading.value = false; resultSuccess.value = false;
-        resultMessage.value = `与已选课程「${conflict.course.nameZh}」存在时间冲突`; return;
-      }
 
       resultLoading.value = false;
       resultSuccess.value = true;
@@ -214,6 +240,8 @@ function useCourseSelect(loadJSON, allLessons, selectedLessons, status) {
       status.semesterAmountActual += 1;
       setVcAllocation(lesson.id, vcInput);
       syncPlanCourseStatus();
+      // v2: set submit status with countdown (HTA 4.3-4.4)
+      setSubmitStatus(lesson.id, 'success');
     }, 1500);
   }
 
@@ -226,7 +254,10 @@ function useCourseSelect(loadJSON, allLessons, selectedLessons, status) {
     dropDialogVisible.value = false;
     const lesson = dropTarget.value;
     if (!lesson) return;
+    confirmDrop_internal(lesson);
+  }
 
+  function confirmDrop_internal(lesson) {
     resultDialogVisible.value = true;
     resultLoading.value = true;
 
@@ -259,6 +290,126 @@ function useCourseSelect(loadJSON, allLessons, selectedLessons, status) {
     drawerCourse.value = course;
     drawerLessons.value = allLessons.value.filter(l => l.course.id === course.id);
     drawerVisible.value = true;
+  }
+
+  // v2: Open course detail drawer (HTA 1.3)
+  async function openDetailDrawer(lesson, courseDetailsRef) {
+    detailDrawerLesson.value = lesson;
+    detailDrawerVisible.value = true;
+    const cid = String(lesson.course.id);
+    if (courseDetailsCache.value[cid]) {
+      detailDrawerCourseInfo.value = courseDetailsCache.value[cid];
+    } else if (courseDetailsRef) {
+      const info = courseDetailsRef[cid] || null;
+      detailDrawerCourseInfo.value = info;
+      if (info) courseDetailsCache.value[cid] = info;
+    }
+  }
+
+  function closeDetailDrawer() {
+    detailDrawerVisible.value = false;
+    detailDrawerLesson.value = null;
+    detailDrawerCourseInfo.value = null;
+  }
+
+  // v2: Compute heat level for a lesson (HTA 2.2)
+  function getHeatLevel(lesson) {
+    const rate = lesson.historyCompetitionRate;
+    if (rate == null) return null;
+    if (rate >= 0.9) return { label: '极热', type: 'danger', color: '#F56C6C' };
+    if (rate >= 0.75) return { label: '热门', type: 'warning', color: '#E6A23C' };
+    if (rate >= 0.5) return { label: '普通', type: '', color: '#909399' };
+    return { label: '冷门', type: 'info', color: '#67C23A' };
+  }
+
+  // v2: Toggle watch for a lesson (用例2)
+  function toggleWatch(lesson) {
+    const id = lesson.id;
+    const ids = watchedLessonIds.value;
+    if (ids.has(id)) {
+      ids.delete(id);
+      ElMessage({ type: 'info', message: `已取消关注「${lesson.course.nameZh}」` });
+    } else {
+      ids.add(id);
+      ElMessage({ type: 'success', message: `已关注「${lesson.course.nameZh}」，名额变动时将提醒您` });
+      startWatcher();
+    }
+  }
+
+  function isWatched(lesson) {
+    return watchedLessonIds.value.has(lesson.id);
+  }
+
+  function startWatcher() {
+    if (watcherTimer.value) return;
+    watcherTimer.value = setInterval(() => {
+      const ids = watchedLessonIds.value;
+      if (ids.size === 0) return;
+      allLessons.value.forEach(l => {
+        if (!ids.has(l.id)) return;
+        if (l.stdCount < l.limitCount && Math.random() < 0.05) {
+          const remaining = l.limitCount - l.stdCount;
+          ElNotification({
+            title: '名额提醒',
+            message: `「${l.course.nameZh}」当前有 ${remaining} 个空余名额，可前往选课`,
+            type: 'success',
+            duration: 8000,
+          });
+        }
+      });
+    }, 30000);
+  }
+
+  function stopWatcher() {
+    if (watcherTimer.value) { clearInterval(watcherTimer.value); watcherTimer.value = null; }
+  }
+
+  // v2: Submit status helpers (HTA 4.3-4.4)
+  function setSubmitStatus(lessonId, statusStr) {
+    const key = String(lessonId);
+    if (submitStatusMap[key]?.timer) clearInterval(submitStatusMap[key].timer);
+
+    if (statusStr === 'success') {
+      let countdown = 10;
+      const timer = setInterval(() => {
+        countdown--;
+        if (submitStatusMap[key]) submitStatusMap[key].countdown = countdown;
+        if (countdown <= 0) {
+          clearInterval(timer);
+          if (submitStatusMap[key]) submitStatusMap[key].status = 'confirmed';
+        }
+      }, 1000);
+      submitStatusMap[key] = { status: 'success', countdown, timer };
+    } else {
+      submitStatusMap[key] = { status: statusStr, countdown: 0, timer: null };
+    }
+  }
+
+  function getSubmitStatus(lessonId) {
+    return submitStatusMap[String(lessonId)] || null;
+  }
+
+  function cancelSubmit(lesson) {
+    const key = String(lesson.id);
+    const ss = submitStatusMap[key];
+    if (!ss || ss.status === 'confirmed') return;
+    if (ss.timer) clearInterval(ss.timer);
+    delete submitStatusMap[key];
+    // Roll back selection
+    confirmDrop_internal(lesson);
+    ElMessage({ type: 'info', message: `已撤销选课「${lesson.course.nameZh}」` });
+  }
+
+  // v2: Conflict dialog actions (HTA 2.3)
+  function showConflictAndProceed() {
+    conflictDialogVisible.value = false;
+    const lesson = conflictTarget.value;
+    if (lesson) _doSelect(lesson, selectVcInput.value || 0);
+  }
+
+  function showConflictAlternatives() {
+    conflictDialogVisible.value = false;
+    ElMessage({ type: 'info', message: '请在课程列表中选择其他教学班' });
   }
 
   // ---- Timetable helpers ----
@@ -434,5 +585,12 @@ function useCourseSelect(loadJSON, allLessons, selectedLessons, status) {
     // Expose preserve-related helpers for other modules (app.js uses these)
     preserveCodes, droppedPreserved, isCorePreserve, markDroppedPreserve,
     vcAllocation, getVcAllocation, setVcAllocation, vcRemaining,
+    // v2: new features
+    detailDrawerVisible, detailDrawerLesson, detailDrawerCourseInfo, courseDetailsCache,
+    openDetailDrawer, closeDetailDrawer, getHeatLevel,
+    watchedLessonIds, toggleWatch, isWatched, stopWatcher,
+    submitStatusMap, getSubmitStatus, cancelSubmit,
+    conflictDialogVisible, conflictTarget, conflictWith,
+    showConflictAndProceed, showConflictAlternatives,
   };
 }

@@ -51,7 +51,11 @@ function useVirtualCostGuide(allLessons, virtualCost) {
       credits: l.course.credits,
       teacher: l.teachers.map(t => t.nameZh).join(', '),
       cost: 0,
-      historyRate: Math.floor(Math.random() * 40 + 30),
+      // v2: use real history data instead of Math.random() (HTA 2.2)
+      historyRate: l.historyCompetitionRate != null
+        ? Math.round(l.historyCompetitionRate * 100)
+        : Math.floor(Math.random() * 40 + 30),
+      avgWinningCost: l.avgWinningCost || null,
       limitCount: l.limitCount || 80,
       stdCount: l.stdCount || 0,
     };

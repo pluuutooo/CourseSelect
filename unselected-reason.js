@@ -67,6 +67,16 @@ function useUnselectedReason(loadJSON) {
       desc: '部分课程要求完成先修课程、评教或其他前置条件。如未满足，系统会自动过滤。',
       suggestion: '请在教务系统确认是否已完成评教，以及是否满足先修课程要求。',
     });
+    // v2: next action guidance (HTA 5.3)
+    reasons.push({
+      type: 'nextAction',
+      icon: 'ArrowRight',
+      color: '#409EFF',
+      title: '下一步操作建议',
+      desc: '意愿值已在本轮清零，您可以：① 进入下一轮选课并调整意愿值分配；② 关注本课程名额变动（每日12:00统一释放退课名额）；③ 使用意愿值策略向导规划下一轮方案。',
+      suggestion: '',
+      action: 'nextRound',
+    });
     return reasons;
   }
 

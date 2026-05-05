@@ -42,7 +42,9 @@
         "id": 1,
         "nameZh": "在读",
         "nameEn": "Active"
-      }
+      },
+      "evaluationCompleted": false,
+      "evaluationUrl": "https://portal2023.ecnu.edu.cn/evaluation"
     },
     {
       "id": 10002,
@@ -85,7 +87,9 @@
         "id": 1,
         "nameZh": "在读",
         "nameEn": "Active"
-      }
+      },
+      "evaluationCompleted": true,
+      "evaluationUrl": "https://portal2023.ecnu.edu.cn/evaluation"
     }
   ]
 }

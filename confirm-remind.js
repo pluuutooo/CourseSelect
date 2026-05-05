@@ -62,7 +62,31 @@ function useConfirmRemind(loadJSON, currentStudent) {
 
   async function loadConfirmData() {
     const data = await loadJSON('preselect-confirm.json');
-    if (data) confirmData.value = data;
+    if (data) {
+      confirmData.value = data;
+      scheduleDeadlineAlert();
+    }
+  }
+
+  // v2: Schedule a second reminder 30 min before deadline (HTA 用例3)
+  let _deadlineTimer = null;
+  function scheduleDeadlineAlert() {
+    if (_deadlineTimer) { clearTimeout(_deadlineTimer); _deadlineTimer = null; }
+    if (!confirmWindow.value) return;
+    const end = new Date(confirmWindow.value.endTime.replace(' ', 'T'));
+    const alertTime = new Date(end.getTime() - 30 * 60 * 1000);
+    const now = new Date();
+    const delay = alertTime - now;
+    if (delay > 0 && pendingCourses.value.length > 0) {
+      _deadlineTimer = setTimeout(() => {
+        ElNotification({
+          title: '选课确认截止提醒',
+          message: `您有 ${pendingCourses.value.length} 门课程待确认，距截止还有 30 分钟，请尽快操作！`,
+          type: 'warning',
+          duration: 10000,
+        });
+      }, delay);
+    }
   }
 
   function dismissReminder() {

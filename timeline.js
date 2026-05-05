@@ -186,6 +186,19 @@ function useTimeline(turns) {
     return groups;
   });
 
+  // v2: resultReady - true when current time is after a turn's result publish time (HTA 5.1)
+  const resultReady = computed(() => {
+    const now = mockNow.value;
+    for (const turn of turns.value) {
+      const selectEnd = parseTime(turn.endTime);
+      // Results are available after the selection window closes
+      if (now > selectEnd) {
+        return { ready: true, turn };
+      }
+    }
+    return { ready: false, turn: null };
+  });
+
   return {
     mockNow,
     timelineNodes,
@@ -195,5 +208,6 @@ function useTimeline(turns) {
     isRoundExpanded,
     toggleRound,
     formatShort,
+    resultReady,
   };
 }

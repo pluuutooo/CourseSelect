@@ -54,10 +54,15 @@ const app = createApp({
       await confirm.loadConfirmData();
     }
 
-    // Wrap enterSelect to pass currentTurn ref from auth
+    // Wrap enterSelect to pass currentTurn ref from auth and load course details
     async function enterSelect(turn) {
       await course.enterSelect(turn, auth.currentTurn);
       await ureason.loadReasons();
+      // v2: load course details into cache
+      const details = await utils.loadJSON('course-details.json');
+      if (details?.data) {
+        Object.assign(course.courseDetailsCache.value, details.data);
+      }
       auth.currentPage.value = 'select';
     }
 
@@ -398,6 +403,39 @@ const app = createApp({
       fbSubmitReply: feedback.submitReply,
       fbCanReply: feedback.canReply,
       fbTicketTimeline: feedback.ticketTimeline,
+
+      // v2: Auth - evaluation check (HTA 1.4)
+      evaluationCompleted: auth.evaluationCompleted,
+      showEvaluationBanner: auth.showEvaluationBanner,
+      dismissEvaluationBanner: auth.dismissEvaluationBanner,
+      goToEvaluation: auth.goToEvaluation,
+
+      // v2: Course detail drawer (HTA 1.3)
+      detailDrawerVisible: course.detailDrawerVisible,
+      detailDrawerLesson: course.detailDrawerLesson,
+      detailDrawerCourseInfo: course.detailDrawerCourseInfo,
+      openDetailDrawer: (lesson) => course.openDetailDrawer(lesson, course.courseDetailsCache.value),
+      closeDetailDrawer: course.closeDetailDrawer,
+      getHeatLevel: course.getHeatLevel,
+
+      // v2: Watch / notify (用例2)
+      toggleWatch: course.toggleWatch,
+      isWatched: course.isWatched,
+
+      // v2: Submit status (HTA 4.3-4.4)
+      submitStatusMap: course.submitStatusMap,
+      getSubmitStatus: course.getSubmitStatus,
+      cancelSubmit: course.cancelSubmit,
+
+      // v2: Conflict dialog (HTA 2.3)
+      conflictDialogVisible: course.conflictDialogVisible,
+      conflictTarget: course.conflictTarget,
+      conflictWith: course.conflictWith,
+      showConflictAndProceed: course.showConflictAndProceed,
+      showConflictAlternatives: course.showConflictAlternatives,
+
+      // v2: Result ready notification (HTA 5.1)
+      resultReady: timeline.resultReady,
     };
   },
 });

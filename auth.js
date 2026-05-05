@@ -1,9 +1,10 @@
 /**
  * auth.js - Login and navigation logic
+ * v2: Added evaluationCompleted check (HTA 1.4)
  */
 
 function useAuth(loadJSON) {
-  const { ref, reactive } = Vue;
+  const { ref, reactive, computed } = Vue;
 
   const currentPage = ref('login');
   const students = ref([]);
@@ -11,6 +12,32 @@ function useAuth(loadJSON) {
   const turns = ref([]);
   const currentTurn = ref(null);
   const currentSemester = ref('');
+
+  // ---- Evaluation pre-check (HTA 1.4) ----
+  const evaluationBannerDismissed = ref(false);
+
+  const evaluationCompleted = computed(() => {
+    return currentStudent.value?.evaluationCompleted !== false;
+  });
+
+  const showEvaluationBanner = computed(() => {
+    return !evaluationCompleted.value && !evaluationBannerDismissed.value;
+  });
+
+  function dismissEvaluationBanner() {
+    evaluationBannerDismissed.value = true;
+  }
+
+  function goToEvaluation() {
+    const url = currentStudent.value?.evaluationUrl || 'https://portal2023.ecnu.edu.cn/evaluation';
+    ElMessageBox.confirm(
+      '即将跳转到教务系统完成评教，完成后请返回此页面继续选课。',
+      '前往评教',
+      { confirmButtonText: '前往评教', cancelButtonText: '稍后再说', type: 'warning' }
+    ).then(() => {
+      window.open(url, '_blank');
+    }).catch(() => {});
+  }
 
   // Login form
   const loginForm = reactive({ username: '', password: '', captcha: '', role: 'undergraduate' });
@@ -46,12 +73,26 @@ function useAuth(loadJSON) {
           return isGrad ? grad : !grad;
         }) || studentsList[0];
         currentStudent.value = stu;
+        evaluationBannerDismissed.value = false;
+
         const turnsData = await loadJSON('open-turns.json');
         if (turnsData) {
           turns.value = turnsData;
           if (turnsData.length > 0) currentSemester.value = turnsData[0].semester.nameZh;
         }
         currentPage.value = 'turns';
+
+        // Show evaluation reminder immediately after login if not completed (HTA 1.4)
+        if (!stu.evaluationCompleted) {
+          setTimeout(() => {
+            ElMessage({
+              type: 'warning',
+              message: '⚠️ 检测到您尚未完成评教，请先完成评教后再选课',
+              duration: 5000,
+              showClose: true,
+            });
+          }, 600);
+        }
       }
     } catch (e) {
       console.warn('doLogin failed', e);
@@ -92,5 +133,8 @@ function useAuth(loadJSON) {
     loginForm, loginRules, loginFormRef,
     handleLogin, enterTurns,
     turnStatusText, turnStatusType,
+    // v2: evaluation check
+    evaluationCompleted, showEvaluationBanner,
+    dismissEvaluationBanner, goToEvaluation,
   };
 }
