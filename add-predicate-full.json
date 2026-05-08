@@ -1,0 +1,17 @@
+{
+  "result": false,
+  "data": {
+    "success": false,
+    "messages": {
+      "3006": {
+        "text": "该教学班已满，无法选课",
+        "textZh": "该教学班已满，无法选课",
+        "textEn": "This class is full, cannot select"
+      }
+    },
+    "errorData": {
+      "type": "normal"
+    }
+  },
+  "_comment": "选课校验失败——人数已满"
+}

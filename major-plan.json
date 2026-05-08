@@ -1,0 +1,399 @@
+{
+  "result": false,
+  "data": {
+    "modules": [
+      {
+        "id": 6001,
+        "nameZh": "公共必修",
+        "nameEn": "Public Compulsory",
+        "requiredCredits": 24,
+        "moduleStatistic": { "passedCredits": 15, "failedCredits": 0, "selectedCredits": 3 },
+        "planCourses": [],
+        "children": [
+          {
+            "id": 6010,
+            "nameZh": "思政",
+            "nameEn": "Ideological & Political",
+            "requiredCredits": 12,
+            "moduleStatistic": { "passedCredits": 6, "failedCredits": 0, "selectedCredits": 3 },
+            "planCourses": [
+              {
+                "id": 7001,
+                "course": { "id": 2001, "code": "MARX001", "nameZh": "马克思主义基本原理", "nameEn": "Marxism Principles", "credits": 3 },
+                "compulsory": true, "openSemester": "2024-2025-1", "planCourseSuggestTermsText": "2",
+                "notInTurn": true, "finalResultTypeValue": "PASSED", "courseSelectPassStatus": "PASS",
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7014,
+                "course": { "id": 2015, "code": "MARX003", "nameZh": "思想道德与法治", "nameEn": "Ideology, Morality and Rule of Law", "credits": 3 },
+                "compulsory": true, "openSemester": "2023-2024-2", "planCourseSuggestTermsText": "1",
+                "notInTurn": true, "finalResultTypeValue": "PASSED", "courseSelectPassStatus": "PASS",
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7008,
+                "course": { "id": 2009, "code": "MARX002", "nameZh": "毛泽东思想和中国特色社会主义理论体系概论", "nameEn": "Introduction to Mao Zedong Thought", "credits": 3 },
+                "compulsory": true, "openSemester": "2025-2026-2", "planCourseSuggestTermsText": "5",
+                "notInTurn": false, "finalResultTypeValue": null, "courseSelectPassStatus": null,
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7010,
+                "course": { "id": 2011, "code": "HIST101", "nameZh": "中国近代史纲要", "nameEn": "Outline of Modern Chinese History", "credits": 3 },
+                "compulsory": true, "openSemester": "2025-2026-2", "planCourseSuggestTermsText": "5",
+                "notInTurn": false, "finalResultTypeValue": null, "courseSelectPassStatus": null,
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              }
+            ],
+            "children": []
+          },
+          {
+            "id": 6011,
+            "nameZh": "英语",
+            "nameEn": "English",
+            "requiredCredits": 8,
+            "moduleStatistic": { "passedCredits": 6, "failedCredits": 0, "selectedCredits": 0 },
+            "planCourses": [
+              {
+                "id": 7015,
+                "course": { "id": 2016, "code": "ENG003", "nameZh": "大学英语(二)", "nameEn": "College English II", "credits": 2 },
+                "compulsory": true, "openSemester": "2024-2025-1", "planCourseSuggestTermsText": "2",
+                "notInTurn": true, "finalResultTypeValue": "PASSED", "courseSelectPassStatus": "PASS",
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7016,
+                "course": { "id": 2017, "code": "ENG002", "nameZh": "大学英语(三)", "nameEn": "College English III", "credits": 2 },
+                "compulsory": true, "openSemester": "2024-2025-2", "planCourseSuggestTermsText": "3",
+                "notInTurn": true, "finalResultTypeValue": "PASSED", "courseSelectPassStatus": "PASS",
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7002,
+                "course": { "id": 2002, "code": "ENG001", "nameZh": "大学英语(四)", "nameEn": "College English IV", "credits": 2 },
+                "compulsory": true, "openSemester": "2025-2026-1", "planCourseSuggestTermsText": "4",
+                "notInTurn": true, "finalResultTypeValue": "PASSED", "courseSelectPassStatus": "PASS",
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7009,
+                "course": { "id": 2010, "code": "ENG301", "nameZh": "英语演讲", "nameEn": "English Public Speaking", "credits": 2 },
+                "compulsory": true, "openSemester": "2025-2026-2", "planCourseSuggestTermsText": "5",
+                "notInTurn": false, "finalResultTypeValue": null, "courseSelectPassStatus": null,
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7017,
+                "course": { "id": 2018, "code": "ENG004", "nameZh": "学术英语写作", "nameEn": "Academic English Writing", "credits": 2 },
+                "compulsory": false, "openSemester": "2026-2027-1", "planCourseSuggestTermsText": "6",
+                "notInTurn": true, "finalResultTypeValue": null, "courseSelectPassStatus": null,
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              }
+            ],
+            "children": []
+          },
+          {
+            "id": 6012,
+            "nameZh": "体育",
+            "nameEn": "Physical Education",
+            "requiredCredits": 4,
+            "moduleStatistic": { "passedCredits": 3, "failedCredits": 0, "selectedCredits": 0 },
+            "planCourses": [
+              {
+                "id": 7018,
+                "course": { "id": 2019, "code": "PE101", "nameZh": "体育(一)", "nameEn": "Physical Education I", "credits": 1 },
+                "compulsory": true, "openSemester": "2023-2024-1", "planCourseSuggestTermsText": "1",
+                "notInTurn": true, "finalResultTypeValue": "PASSED", "courseSelectPassStatus": "PASS",
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7019,
+                "course": { "id": 2020, "code": "PE102", "nameZh": "体育(二)", "nameEn": "Physical Education II", "credits": 1 },
+                "compulsory": true, "openSemester": "2023-2024-2", "planCourseSuggestTermsText": "2",
+                "notInTurn": true, "finalResultTypeValue": "PASSED", "courseSelectPassStatus": "PASS",
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7020,
+                "course": { "id": 2021, "code": "PE103", "nameZh": "体育(三)", "nameEn": "Physical Education III", "credits": 1 },
+                "compulsory": true, "openSemester": "2024-2025-1", "planCourseSuggestTermsText": "3",
+                "notInTurn": true, "finalResultTypeValue": "PASSED", "courseSelectPassStatus": "PASS",
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7006,
+                "course": { "id": 2007, "code": "PE201", "nameZh": "体育(四)", "nameEn": "Physical Education IV", "credits": 1 },
+                "compulsory": true, "openSemester": "2025-2026-2", "planCourseSuggestTermsText": "4",
+                "notInTurn": false, "finalResultTypeValue": null, "courseSelectPassStatus": null,
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7021,
+                "course": { "id": 2022, "code": "PE202", "nameZh": "体育(五)", "nameEn": "Physical Education V", "credits": 1 },
+                "compulsory": false, "openSemester": "2026-2027-1", "planCourseSuggestTermsText": "6",
+                "notInTurn": true, "finalResultTypeValue": null, "courseSelectPassStatus": null,
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              }
+            ],
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": 6002,
+        "nameZh": "通识教育",
+        "nameEn": "General Education",
+        "requiredCredits": 10,
+        "moduleStatistic": { "passedCredits": 4, "failedCredits": 0, "selectedCredits": 0 },
+        "planCourses": [
+          {
+            "id": 7022,
+            "course": { "id": 2023, "code": "GE102", "nameZh": "音乐欣赏", "nameEn": "Music Appreciation", "credits": 2 },
+            "compulsory": false, "openSemester": "2024-2025-2", "planCourseSuggestTermsText": "3-6",
+            "notInTurn": true, "finalResultTypeValue": "PASSED", "courseSelectPassStatus": "PASS",
+            "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+            "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+          },
+          {
+            "id": 7023,
+            "course": { "id": 2024, "code": "GE103", "nameZh": "中华文化概论", "nameEn": "Introduction to Chinese Culture", "credits": 2 },
+            "compulsory": false, "openSemester": "2025-2026-1", "planCourseSuggestTermsText": "3-6",
+            "notInTurn": true, "finalResultTypeValue": "PASSED", "courseSelectPassStatus": "PASS",
+            "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+            "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+          },
+          {
+            "id": 7007,
+            "course": { "id": 2008, "code": "GE101", "nameZh": "影视鉴赏", "nameEn": "Film Appreciation", "credits": 2 },
+            "compulsory": false, "openSemester": "2025-2026-2", "planCourseSuggestTermsText": "3-6",
+            "notInTurn": false, "finalResultTypeValue": null, "courseSelectPassStatus": null,
+            "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+            "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+          },
+          {
+            "id": 7011,
+            "course": { "id": 2012, "code": "GE201", "nameZh": "《量子思维》导读", "nameEn": "A Guide to Quantum Thinking", "credits": 2 },
+            "compulsory": false, "openSemester": "2025-2026-2", "planCourseSuggestTermsText": "3-6",
+            "notInTurn": false, "finalResultTypeValue": null, "courseSelectPassStatus": null,
+            "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+            "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+          },
+          {
+            "id": 7024,
+            "course": { "id": 2025, "code": "GE202", "nameZh": "创新创业基础", "nameEn": "Innovation and Entrepreneurship", "credits": 2 },
+            "compulsory": false, "openSemester": "2026-2027-1", "planCourseSuggestTermsText": "6",
+            "notInTurn": true, "finalResultTypeValue": null, "courseSelectPassStatus": null,
+            "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+            "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+          },
+          {
+            "id": 7025,
+            "course": { "id": 2026, "code": "GE203", "nameZh": "心理学导论", "nameEn": "Introduction to Psychology", "credits": 2 },
+            "compulsory": false, "openSemester": "2026-2027-2", "planCourseSuggestTermsText": "7",
+            "notInTurn": true, "finalResultTypeValue": null, "courseSelectPassStatus": null,
+            "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+            "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+          }
+        ],
+        "children": []
+      },
+      {
+        "id": 6003,
+        "nameZh": "专业课程",
+        "nameEn": "Major Courses",
+        "requiredCredits": 60,
+        "moduleStatistic": { "passedCredits": 33, "failedCredits": 0, "selectedCredits": 8 },
+        "planCourses": [],
+        "children": [
+          {
+            "id": 6020,
+            "nameZh": "专业必修",
+            "nameEn": "Major Compulsory",
+            "requiredCredits": 45,
+            "moduleStatistic": { "passedCredits": 28, "failedCredits": 0, "selectedCredits": 8 },
+            "planCourses": [
+              {
+                "id": 7026,
+                "course": { "id": 2027, "code": "MATH101", "nameZh": "高等数学(上)", "nameEn": "Advanced Mathematics I", "credits": 5 },
+                "compulsory": true, "openSemester": "2023-2024-1", "planCourseSuggestTermsText": "1",
+                "notInTurn": true, "finalResultTypeValue": "PASSED", "courseSelectPassStatus": "PASS",
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7027,
+                "course": { "id": 2028, "code": "MATH102", "nameZh": "高等数学(下)", "nameEn": "Advanced Mathematics II", "credits": 5 },
+                "compulsory": true, "openSemester": "2023-2024-2", "planCourseSuggestTermsText": "2",
+                "notInTurn": true, "finalResultTypeValue": "PASSED", "courseSelectPassStatus": "PASS",
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7028,
+                "course": { "id": 2029, "code": "MATH103", "nameZh": "线性代数", "nameEn": "Linear Algebra", "credits": 3 },
+                "compulsory": true, "openSemester": "2024-2025-1", "planCourseSuggestTermsText": "3",
+                "notInTurn": true, "finalResultTypeValue": "PASSED", "courseSelectPassStatus": "PASS",
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7029,
+                "course": { "id": 2030, "code": "CS101", "nameZh": "程序设计基础", "nameEn": "Fundamentals of Programming", "credits": 4 },
+                "compulsory": true, "openSemester": "2023-2024-1", "planCourseSuggestTermsText": "1",
+                "notInTurn": true, "finalResultTypeValue": "PASSED", "courseSelectPassStatus": "PASS",
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7030,
+                "course": { "id": 2031, "code": "CS102", "nameZh": "数据结构", "nameEn": "Data Structures", "credits": 4 },
+                "compulsory": true, "openSemester": "2024-2025-1", "planCourseSuggestTermsText": "3",
+                "notInTurn": true, "finalResultTypeValue": "PASSED", "courseSelectPassStatus": "PASS",
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7031,
+                "course": { "id": 2032, "code": "CS201", "nameZh": "计算机组成原理", "nameEn": "Computer Organization", "credits": 4 },
+                "compulsory": true, "openSemester": "2024-2025-2", "planCourseSuggestTermsText": "4",
+                "notInTurn": true, "finalResultTypeValue": "PASSED", "courseSelectPassStatus": "PASS",
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7032,
+                "course": { "id": 2033, "code": "CS202", "nameZh": "数据库系统", "nameEn": "Database Systems", "credits": 3 },
+                "compulsory": true, "openSemester": "2024-2025-2", "planCourseSuggestTermsText": "4",
+                "notInTurn": true, "finalResultTypeValue": "PASSED", "courseSelectPassStatus": "PASS",
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7033,
+                "course": { "id": 2006, "code": "MATH201", "nameZh": "概率论与数理统计", "nameEn": "Probability and Mathematical Statistics", "credits": 4 },
+                "compulsory": true, "openSemester": "2025-2026-2", "planCourseSuggestTermsText": "5",
+                "notInTurn": false, "finalResultTypeValue": null, "courseSelectPassStatus": null,
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7003,
+                "course": { "id": 2003, "code": "CS301", "nameZh": "操作系统", "nameEn": "Operating Systems", "credits": 4 },
+                "compulsory": true, "openSemester": "2025-2026-2", "planCourseSuggestTermsText": "5",
+                "notInTurn": false, "finalResultTypeValue": null, "courseSelectPassStatus": null,
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7004,
+                "course": { "id": 2004, "code": "CS302", "nameZh": "计算机网络", "nameEn": "Computer Networks", "credits": 3 },
+                "compulsory": true, "openSemester": "2025-2026-2", "planCourseSuggestTermsText": "5",
+                "notInTurn": false, "finalResultTypeValue": null, "courseSelectPassStatus": null,
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7005,
+                "course": { "id": 2005, "code": "CS401", "nameZh": "人工智能导论", "nameEn": "Introduction to Artificial Intelligence", "credits": 3 },
+                "compulsory": true, "openSemester": "2025-2026-2", "planCourseSuggestTermsText": "5",
+                "notInTurn": false, "finalResultTypeValue": null, "courseSelectPassStatus": null,
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7034,
+                "course": { "id": 2034, "code": "CS203", "nameZh": "软件工程", "nameEn": "Software Engineering", "credits": 3 },
+                "compulsory": true, "openSemester": "2026-2027-1", "planCourseSuggestTermsText": "6",
+                "notInTurn": true, "finalResultTypeValue": null, "courseSelectPassStatus": null,
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              }
+            ],
+            "children": []
+          },
+          {
+            "id": 6021,
+            "nameZh": "专业选修",
+            "nameEn": "Major Elective",
+            "requiredCredits": 15,
+            "moduleStatistic": { "passedCredits": 5, "failedCredits": 0, "selectedCredits": 0 },
+            "planCourses": [
+              {
+                "id": 7035,
+                "course": { "id": 2035, "code": "CS304", "nameZh": "机器学习", "nameEn": "Machine Learning", "credits": 3 },
+                "compulsory": false, "openSemester": "2025-2026-1", "planCourseSuggestTermsText": "4-7",
+                "notInTurn": true, "finalResultTypeValue": "PASSED", "courseSelectPassStatus": "PASS",
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7036,
+                "course": { "id": 2036, "code": "CS307", "nameZh": "信息安全", "nameEn": "Information Security", "credits": 2 },
+                "compulsory": false, "openSemester": "2025-2026-1", "planCourseSuggestTermsText": "4-7",
+                "notInTurn": true, "finalResultTypeValue": "PASSED", "courseSelectPassStatus": "PASS",
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7012,
+                "course": { "id": 2013, "code": "CS303", "nameZh": "数据可视化", "nameEn": "Data Visualization", "credits": 2 },
+                "compulsory": false, "openSemester": "2025-2026-2", "planCourseSuggestTermsText": "5-7",
+                "notInTurn": false, "finalResultTypeValue": null, "courseSelectPassStatus": null,
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7013,
+                "course": { "id": 2014, "code": "MATH301", "nameZh": "数学建模", "nameEn": "Mathematical Modeling", "credits": 3 },
+                "compulsory": false, "openSemester": "2025-2026-2", "planCourseSuggestTermsText": "5-7",
+                "notInTurn": false, "finalResultTypeValue": null, "courseSelectPassStatus": null,
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7037,
+                "course": { "id": 2037, "code": "CS305", "nameZh": "计算机图形学", "nameEn": "Computer Graphics", "credits": 3 },
+                "compulsory": false, "openSemester": "2026-2027-1", "planCourseSuggestTermsText": "6-7",
+                "notInTurn": true, "finalResultTypeValue": null, "courseSelectPassStatus": null,
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7038,
+                "course": { "id": 2038, "code": "CS306", "nameZh": "自然语言处理", "nameEn": "Natural Language Processing", "credits": 3 },
+                "compulsory": false, "openSemester": "2026-2027-2", "planCourseSuggestTermsText": "7",
+                "notInTurn": true, "finalResultTypeValue": null, "courseSelectPassStatus": null,
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              },
+              {
+                "id": 7039,
+                "course": { "id": 2039, "code": "CS308", "nameZh": "云计算技术", "nameEn": "Cloud Computing", "credits": 2 },
+                "compulsory": false, "openSemester": "2026-2027-1", "planCourseSuggestTermsText": "6-7",
+                "notInTurn": true, "finalResultTypeValue": null, "courseSelectPassStatus": null,
+                "selectedLesson": null, "selectType": "选课", "canRetake": false, "canSubsitute": false,
+                "isShow": true, "coursePackAssoc": null, "substituteCourseProfileVms": []
+              }
+            ],
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+}

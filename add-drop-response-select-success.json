@@ -1,0 +1,9 @@
+{
+  "result": false,
+  "data": {
+    "success": true,
+    "errorMessage": null,
+    "resend": false
+  },
+  "_comment": "选课请求成功"
+}

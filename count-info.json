@@ -1,0 +1,13 @@
+{
+  "result": false,
+  "data": {
+    "limitCount": 120,
+    "stdCount": 87,
+    "preStdCount": 0,
+    "isOpenCross": true,
+    "amLimitCountStr": "20",
+    "amStdCount": 5,
+    "preAmStdCount": 0
+  },
+  "_comment": "教学班人数详情弹窗"
+}

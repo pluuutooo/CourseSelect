@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -u -c 'import re; lines = open\\('\\\\''index.html'\\\\'', encoding='\\\\''utf-8'\\\\''\\).readlines\\(\\); depth = 0; app_start = None *)",
+      "Bash(node -e ' *)",
+      "Bash(node.exe -e \"const fs = require\\('fs'\\); const html = fs.readFileSync\\('c:/Users/zrs/Desktop/course/prototype/index.html', 'utf8'\\); const lines = html.split\\('\\\\\\\\n'\\); let depth = 0; for \\(let i = 0; i < lines.length; i++\\) { const line = lines[i]; const opens = \\(line.match\\(/<div[\\\\\\\\s>]/g\\) || []\\).length; const closes = \\(line.match\\(/<\\\\\\\\/div>/g\\) || []\\).length; depth += opens - closes; if \\(\\(opens || closes\\) && \\(depth <= 2 || opens !== closes\\)\\) { console.log\\('L' + \\(i+1\\) + ' d=' + depth + ' +' + opens + '/-' + closes + '  ' + line.trim\\(\\).substring\\(0, 90\\)\\); } } console.log\\('Final depth:', depth\\);\")",
+      "Bash(python -c ' *)",
+      "Bash(c:/Users/zrs/AppData/Local/Programs/Python/Python313/python.exe -c ' *)",
+      "Bash(curl -sL \"https://unpkg.com/@element-plus/icons-vue/global.d.ts\")",
+      "Bash(curl -sL \"https://unpkg.com/@element-plus/icons-vue/dist/types.d.ts\")",
+      "Bash(curl -sL \"https://unpkg.com/@element-plus/icons-vue\")"
+    ]
+  }
+}

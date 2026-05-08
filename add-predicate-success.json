@@ -1,0 +1,10 @@
+{
+  "result": false,
+  "data": {
+    "success": true,
+    "messages": {
+      "3001": null
+    }
+  },
+  "_comment": "选课校验通过，messages 中对应 lessonId 为 null 表示无冲突"
+}

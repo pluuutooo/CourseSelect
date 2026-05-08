@@ -1,0 +1,21 @@
+{
+  "result": false,
+  "data": {
+    "weekdays": [1, 2, 3, 4, 5],
+    "units": [
+      { "id": 1, "nameZh": "第1节", "nameEn": "Period 1", "startTime": "08:00", "endTime": "08:45" },
+      { "id": 2, "nameZh": "第2节", "nameEn": "Period 2", "startTime": "08:55", "endTime": "09:40" },
+      { "id": 3, "nameZh": "第3节", "nameEn": "Period 3", "startTime": "10:00", "endTime": "10:45" },
+      { "id": 4, "nameZh": "第4节", "nameEn": "Period 4", "startTime": "10:55", "endTime": "11:40" },
+      { "id": 5, "nameZh": "第5节", "nameEn": "Period 5", "startTime": "13:00", "endTime": "13:45" },
+      { "id": 6, "nameZh": "第6节", "nameEn": "Period 6", "startTime": "13:55", "endTime": "14:40" },
+      { "id": 7, "nameZh": "第7节", "nameEn": "Period 7", "startTime": "15:00", "endTime": "15:45" },
+      { "id": 8, "nameZh": "第8节", "nameEn": "Period 8", "startTime": "15:55", "endTime": "16:40" },
+      { "id": 9, "nameZh": "第9节", "nameEn": "Period 9", "startTime": "18:00", "endTime": "18:45" },
+      { "id": 10, "nameZh": "第10节", "nameEn": "Period 10", "startTime": "18:55", "endTime": "19:40" },
+      { "id": 11, "nameZh": "第11节", "nameEn": "Period 11", "startTime": "19:50", "endTime": "20:35" },
+      { "id": 12, "nameZh": "第12节", "nameEn": "Period 12", "startTime": "20:45", "endTime": "21:30" }
+    ]
+  },
+  "_comment": "课表布局：weekdays 定义显示哪几天，units 定义每日节次"
+}

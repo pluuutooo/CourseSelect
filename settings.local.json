@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m http.server 8080)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8080/prototype/index.html)",
+      "Bash(python -m http.server 8080 --bind 127.0.0.1)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:8080/prototype/index.html)",
+      "Bash(python -c ':*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:8090/prototype/index.html)",
+      "Bash(dir \"c:\\\\Users\\\\zrs\\\\Desktop\\\\course\\\\prototype\\\\\")"
+    ]
+  }
+}
