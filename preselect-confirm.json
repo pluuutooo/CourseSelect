@@ -1,0 +1,66 @@
+{
+  "result": false,
+  "data": {
+    "confirmWindow": {
+      "beginTime": "2026-04-20 08:00:00",
+      "endTime": "2026-04-25 22:00:00",
+      "description": "第一轮预选课确认窗口期"
+    },
+    "courses": [
+      {
+        "id": 3001,
+        "code": "CS301.01",
+        "course": {
+          "id": 2003,
+          "code": "CS301",
+          "nameZh": "操作系统",
+          "credits": 4
+        },
+        "teachers": [{ "id": 901, "nameZh": "王教授" }],
+        "dateTimePlace": {
+          "textZh": "星期一 3-4节 教学楼A302\n星期三 1-2节 教学楼A302"
+        },
+        "campus": { "nameZh": "闵行校区" },
+        "confirmStatus": "WAIT_CONFIRM",
+        "preSelectRound": "第一轮意愿值选课",
+        "virtualCostUsed": 35
+      },
+      {
+        "id": 3002,
+        "code": "CS302.01",
+        "course": {
+          "id": 2004,
+          "code": "CS302",
+          "nameZh": "计算机网络",
+          "credits": 3
+        },
+        "teachers": [{ "id": 902, "nameZh": "刘教授" }],
+        "dateTimePlace": {
+          "textZh": "星期二 3-4节 教学楼B201\n星期四 3-4节 教学楼B201"
+        },
+        "campus": { "nameZh": "闵行校区" },
+        "confirmStatus": "WAIT_CONFIRM",
+        "preSelectRound": "第一轮意愿值选课",
+        "virtualCostUsed": 28
+      },
+      {
+        "id": 3005,
+        "code": "MATH201.01",
+        "course": {
+          "id": 2006,
+          "code": "MATH201",
+          "nameZh": "概率论与数理统计",
+          "credits": 4
+        },
+        "teachers": [{ "id": 906, "nameZh": "陈教授" }],
+        "dateTimePlace": {
+          "textZh": "星期一 1-2节 教学楼D301\n星期四 1-2节 教学楼D301"
+        },
+        "campus": { "nameZh": "闵行校区" },
+        "confirmStatus": "CONFIRMED",
+        "preSelectRound": "第一轮意愿值选课",
+        "virtualCostUsed": 22
+      }
+    ]
+  }
+}

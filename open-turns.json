@@ -1,0 +1,153 @@
+{
+  "result": false,
+  "data": [
+    {
+      "id": 5001,
+      "name": "第一轮意愿值选课",
+      "nameZh": "第一轮意愿值选课",
+      "nameEn": "Round 1 - Preference Value",
+      "code": "TURN-2026-S1-R1",
+      "semester": {
+        "id": 401,
+        "nameZh": "2025-2026学年第二学期",
+        "nameEn": "2025-2026 Spring Semester"
+      },
+      "beginTime": "2026-04-07 08:00:00",
+      "endTime": "2026-04-10 22:00:00",
+      "previewBeginTime": "2026-04-05 08:00:00",
+      "previewEndTime": "2026-04-07 08:00:00",
+      "dropBeginTime": "2026-04-07 08:00:00",
+      "dropEndTime": "2026-04-10 22:00:00",
+      "canSelect": false,
+      "canDrop": false,
+      "canPreview": false,
+      "status": "ENDED",
+      "turnMode": {
+        "enableVirtualWallet": true,
+        "showCount": false
+      },
+      "bizTypeId": 2,
+      "roundNo": 1,
+      "bulletin": "<p>第一轮意愿值选课说明：</p><p>1. 每位同学初始拥有100意愿值，可自由分配至意向课程</p><p>2. 本轮结束后按意愿值高低筛选，未使用意愿值不累积至下轮</p><p>3. 筛选结果将于4月11日公布</p>",
+      "rules": "<p>1. 每位同学每学期最多选30学分</p><p>2. 冲突课程不可同时选择</p><p>3. 退课需在规定时间内完成</p><p>4. 意愿值分配后在本轮结束前可修改</p>",
+      "quotaReleaseTimes": [],
+      "lowestPeople": 10,
+      "capPercentage": null,
+      "notNowTurnDropLimitCount": null
+    },
+    {
+      "id": 5002,
+      "name": "第二轮意愿值选课",
+      "nameZh": "第二轮意愿值选课",
+      "nameEn": "Round 2 - Preference Value",
+      "code": "TURN-2026-S1-R2",
+      "semester": {
+        "id": 401,
+        "nameZh": "2025-2026学年第二学期",
+        "nameEn": "2025-2026 Spring Semester"
+      },
+      "beginTime": "2026-04-14 08:00:00",
+      "endTime": "2026-04-17 22:00:00",
+      "previewBeginTime": "2026-04-12 08:00:00",
+      "previewEndTime": "2026-04-14 08:00:00",
+      "dropBeginTime": "2026-04-14 08:00:00",
+      "dropEndTime": "2026-04-17 22:00:00",
+      "canSelect": true,
+      "canDrop": true,
+      "canPreview": false,
+      "status": "SELECT_AND_DROP",
+      "turnMode": {
+        "enableVirtualWallet": true,
+        "showCount": false
+      },
+      "bizTypeId": 2,
+      "roundNo": 2,
+      "bulletin": "<p>第二轮意愿值选课说明：</p><p>1. 意愿值重置为100，请重新分配</p><p>2. 第一轮未选中的课程可继续参与本轮</p><p>3. 退课释放的名额每天中午12:00统一更新</p>",
+      "rules": "<p>1. 每位同学每学期最多选30学分</p><p>2. 冲突课程不可同时选择</p><p>3. 退课需在规定时间内完成</p>",
+      "quotaReleaseTimes": [
+        "2026-04-15 12:00:00",
+        "2026-04-16 12:00:00",
+        "2026-04-17 12:00:00"
+      ],
+      "lowestPeople": 10,
+      "capPercentage": null,
+      "notNowTurnDropLimitCount": null
+    },
+    {
+      "id": 5003,
+      "name": "第三轮抢课",
+      "nameZh": "第三轮抢课",
+      "nameEn": "Round 3 - First-come-first-served",
+      "code": "TURN-2026-S1-R3",
+      "semester": {
+        "id": 401,
+        "nameZh": "2025-2026学年第二学期",
+        "nameEn": "2025-2026 Spring Semester"
+      },
+      "beginTime": "2026-04-21 08:00:00",
+      "endTime": "2026-04-23 22:00:00",
+      "previewBeginTime": null,
+      "previewEndTime": null,
+      "dropBeginTime": "2026-04-21 08:00:00",
+      "dropEndTime": "2026-04-24 22:00:00",
+      "canSelect": false,
+      "canDrop": false,
+      "canPreview": false,
+      "status": "NOT_START",
+      "turnMode": {
+        "enableVirtualWallet": false,
+        "showCount": true
+      },
+      "bizTypeId": 2,
+      "roundNo": 3,
+      "bulletin": "<p>第三轮为抢课轮次，先到先得，无需意愿值。</p><p>退课释放的名额每天中午12:00统一更新，请同学们留意。</p>",
+      "rules": "<p>1. 本轮采取先到先得模式，无需分配意愿值</p><p>2. 名额有限，请尽快操作</p><p>3. 退课截止日期晚于选课截止日期一天</p>",
+      "quotaReleaseTimes": [
+        "2026-04-21 12:00:00",
+        "2026-04-22 12:00:00",
+        "2026-04-23 12:00:00"
+      ],
+      "lowestPeople": null,
+      "capPercentage": null,
+      "notNowTurnDropLimitCount": null
+    },
+    {
+      "id": 5004,
+      "name": "退课名额释放期",
+      "nameZh": "退课名额释放期",
+      "nameEn": "Drop Period - Quota Release",
+      "code": "TURN-2026-S1-DROP",
+      "semester": {
+        "id": 401,
+        "nameZh": "2025-2026学年第二学期",
+        "nameEn": "2025-2026 Spring Semester"
+      },
+      "beginTime": "2026-04-28 08:00:00",
+      "endTime": "2026-04-30 22:00:00",
+      "previewBeginTime": null,
+      "previewEndTime": null,
+      "dropBeginTime": "2026-04-28 08:00:00",
+      "dropEndTime": "2026-04-30 22:00:00",
+      "canSelect": false,
+      "canDrop": false,
+      "canPreview": false,
+      "status": "NOT_START",
+      "turnMode": {
+        "enableVirtualWallet": false,
+        "showCount": true
+      },
+      "bizTypeId": 2,
+      "roundNo": 4,
+      "bulletin": "<p>退课名额释放期，可退课和补选释放的名额。</p><p>名额每天中午12:00统一更新。</p>",
+      "rules": "",
+      "quotaReleaseTimes": [
+        "2026-04-28 12:00:00",
+        "2026-04-29 12:00:00",
+        "2026-04-30 12:00:00"
+      ],
+      "lowestPeople": null,
+      "capPercentage": null,
+      "notNowTurnDropLimitCount": null
+    }
+  ]
+}

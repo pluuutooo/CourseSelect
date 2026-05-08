@@ -1,0 +1,8 @@
+{
+  "result": false,
+  "data": {
+    "token": "mock-jwt-token-abc123def456",
+    "studentId": 10001
+  },
+  "_comment": "SSO 登录成功返回"
+}

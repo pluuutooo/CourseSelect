@@ -1,0 +1,36 @@
+{
+  "result": false,
+  "data": {
+    "campuses": [
+      { "id": 1, "nameZh": "闵行校区", "nameEn": "Minhang Campus" },
+      { "id": 2, "nameZh": "普陀校区", "nameEn": "Putuo Campus" }
+    ],
+    "departments": [
+      { "id": 101, "nameZh": "计算机科学与技术学院", "nameEn": "School of Computer Science" },
+      { "id": 102, "nameZh": "数学科学学院", "nameEn": "School of Mathematical Sciences" },
+      { "id": 103, "nameZh": "物理与电子科学学院", "nameEn": "School of Physics" },
+      { "id": 104, "nameZh": "外语学院", "nameEn": "School of Foreign Languages" },
+      { "id": 105, "nameZh": "教育学部", "nameEn": "Faculty of Education" },
+      { "id": 106, "nameZh": "马克思主义学院", "nameEn": "School of Marxism" }
+    ],
+    "openDepartments": [
+      { "id": 101, "nameZh": "计算机科学与技术学院", "nameEn": "School of Computer Science" },
+      { "id": 102, "nameZh": "数学科学学院", "nameEn": "School of Mathematical Sciences" },
+      { "id": 103, "nameZh": "物理与电子科学学院", "nameEn": "School of Physics" },
+      { "id": 106, "nameZh": "马克思主义学院", "nameEn": "School of Marxism" }
+    ],
+    "grades": ["2021", "2022", "2023", "2024", "2025"],
+    "courseTypes": [
+      { "id": 1, "nameZh": "必修课", "nameEn": "Compulsory" },
+      { "id": 2, "nameZh": "选修课", "nameEn": "Elective" },
+      { "id": 3, "nameZh": "通识课", "nameEn": "General Education" },
+      { "id": 4, "nameZh": "实践课", "nameEn": "Practice" }
+    ],
+    "courseProperties": [
+      { "id": 1, "nameZh": "专业核心", "nameEn": "Major Core" },
+      { "id": 2, "nameZh": "专业选修", "nameEn": "Major Elective" },
+      { "id": 3, "nameZh": "通识必修", "nameEn": "General Compulsory" },
+      { "id": 4, "nameZh": "通识选修", "nameEn": "General Elective" }
+    ]
+  }
+}

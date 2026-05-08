@@ -1,0 +1,97 @@
+{
+  "result": false,
+  "data": [
+    {
+      "id": 3005,
+      "code": "MATH201.01",
+      "name": { "nameZh": "概率论与数理统计-01班", "nameEn": "Probability & Statistics-01" },
+      "course": {
+        "id": 2006,
+        "code": "MATH201",
+        "nameZh": "概率论与数理统计",
+        "nameEn": "Probability and Mathematical Statistics",
+        "credits": 4
+      },
+      "teachers": [
+        { "id": 906, "nameZh": "陈教授", "nameEn": "Prof. Chen" }
+      ],
+      "dateTimePlace": {
+        "textZh": "星期一 1-2节 教学楼D301\n星期四 1-2节 教学楼D301",
+        "textEn": "Mon 1-2 Building D301\nThu 1-2 Building D301"
+      },
+      "campus": { "id": 1, "nameZh": "闵行校区", "nameEn": "Minhang Campus" },
+      "pinned": true,
+      "retake": false,
+      "virtualCost": null,
+      "hasTs": true,
+      "hasCs": false,
+      "courseProperty": "majorCompulsory",
+      "scheduleRemark": null,
+      "schedules": [
+        { "weekday": 1, "startTime": 1, "entTime": 2, "lessonId": 3005 },
+        { "weekday": 4, "startTime": 1, "entTime": 2, "lessonId": 3005 }
+      ]
+    },
+    {
+      "id": 3008,
+      "code": "MARX002.01",
+      "name": { "nameZh": "毛泽东思想和中国特色社会主义理论体系概论-01班", "nameEn": "Mao Zedong Thought-01" },
+      "course": {
+        "id": 2009,
+        "code": "MARX002",
+        "nameZh": "毛泽东思想和中国特色社会主义理论体系概论",
+        "nameEn": "Introduction to Mao Zedong Thought",
+        "credits": 3
+      },
+      "teachers": [
+        { "id": 909, "nameZh": "郑教授", "nameEn": "Prof. Zheng" }
+      ],
+      "dateTimePlace": {
+        "textZh": "星期五 3-5节 教学楼A101",
+        "textEn": "Fri 3-5 Building A101"
+      },
+      "campus": { "id": 1, "nameZh": "闵行校区", "nameEn": "Minhang Campus" },
+      "pinned": true,
+      "retake": false,
+      "virtualCost": null,
+      "hasTs": true,
+      "hasCs": false,
+      "courseProperty": "publicCompulsory",
+      "scheduleRemark": null,
+      "schedules": [
+        { "weekday": 5, "startTime": 3, "entTime": 5, "lessonId": 3008 }
+      ]
+    },
+    {
+      "id": 3001,
+      "code": "CS301.01",
+      "name": { "nameZh": "操作系统-01班", "nameEn": "Operating Systems-01" },
+      "course": {
+        "id": 2003,
+        "code": "CS301",
+        "nameZh": "操作系统",
+        "nameEn": "Operating Systems",
+        "credits": 4
+      },
+      "teachers": [
+        { "id": 901, "nameZh": "王教授", "nameEn": "Prof. Wang" }
+      ],
+      "dateTimePlace": {
+        "textZh": "星期一 3-4节 教学楼A302\n星期三 1-2节 教学楼A302",
+        "textEn": "Mon 3-4 Building A302\nWed 1-2 Building A302"
+      },
+      "campus": { "id": 1, "nameZh": "闵行校区", "nameEn": "Minhang Campus" },
+      "pinned": true,
+      "retake": false,
+      "virtualCost": null,
+      "hasTs": true,
+      "hasCs": false,
+      "courseProperty": "majorCompulsory",
+      "scheduleRemark": null,
+      "schedules": [
+        { "weekday": 1, "startTime": 3, "entTime": 4, "lessonId": 3001 },
+        { "weekday": 3, "startTime": 1, "entTime": 2, "lessonId": 3001 }
+      ]
+    }
+  ]
+}

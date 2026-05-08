@@ -1,0 +1,46 @@
+{
+  "result": false,
+  "data": {
+    "rootStatistic": {
+      "passedCredits": 52,
+      "failedCredits": 0,
+      "selectedCredits": 11
+    },
+    "modules": [
+      {
+        "id": 6001,
+        "nameZh": "公共必修",
+        "nameEn": "Public Compulsory",
+        "requiredCredits": 24,
+        "moduleStatistic": {
+          "passedCredits": 15,
+          "failedCredits": 0,
+          "selectedCredits": 3
+        }
+      },
+      {
+        "id": 6002,
+        "nameZh": "通识教育",
+        "nameEn": "General Education",
+        "requiredCredits": 10,
+        "moduleStatistic": {
+          "passedCredits": 4,
+          "failedCredits": 0,
+          "selectedCredits": 0
+        }
+      },
+      {
+        "id": 6003,
+        "nameZh": "专业课程",
+        "nameEn": "Major Courses",
+        "requiredCredits": 60,
+        "moduleStatistic": {
+          "passedCredits": 33,
+          "failedCredits": 0,
+          "selectedCredits": 8
+        }
+      }
+    ]
+  },
+  "_comment": "培养方案完成情况"
+}
