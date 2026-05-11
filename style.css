@@ -3,7 +3,21 @@
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #303133; background: #F5F7FA; }
 
 /* ===== Login Page ===== */
-.login-page { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.login-page { 
+  /* display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+  background-color: #f0f2f5;
+  /* 2. 应用你下载的 Blob 转换后的本地图片 */
+  background-image: url('./background_image.png');
+  
+  /* 3. 仿照原版配置：居中并底部对齐 */
+  background-size: cover;
+  background-position: center bottom; 
+  background-repeat: no-repeat;
+
+  /* 4. 布局配置 */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column; /* 方便以后加页脚 */ }
 .login-card { width: 400px; background: #fff; border-radius: 8px; padding: 40px 36px; box-shadow: 0 8px 32px rgba(0,0,0,.18); }
 .login-title { text-align: center; font-size: 32px; color: #303133; margin-bottom: 4px; }
 .login-subtitle { text-align: center; color: #909399; margin-bottom: 28px; font-size: 14px; }
