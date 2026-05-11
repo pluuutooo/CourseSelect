@@ -1,5 +1,5 @@
 /* ===== Login Page ===== */
-.login-page { 
+  .login-page { 
   /* display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
   background-color: #f0f2f5;
   /* 2. 应用你下载的 Blob 转换后的本地图片 */
@@ -11,9 +11,11 @@
   background-repeat: no-repeat;
 
   /* 4. 布局配置 */
-  min-height: 100vh;
+  align-items: center;
   display: flex;
-  flex-direction: column; /* 方便以后加页脚 */ }
+  justify-content: center;
+  min-height: 100vh;
+}
 .login-card {
   width: 400px;
   background: #fff;
