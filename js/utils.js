@@ -8,7 +8,8 @@ function useUtils() {
   // ---- Mock Data Loader ----
   async function loadJSON(filename) {
     try {
-      const res = await fetch(filename);
+      const path = (filename.indexOf('/') === -1 && filename.endsWith('.json')) ? 'json/' + filename : filename;
+      const res = await fetch(path);
       if (!res.ok) {
         console.warn('Failed to fetch ' + filename + ': ' + res.status);
         return null;
