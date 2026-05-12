@@ -32,10 +32,11 @@ function useFeedback(loadJSON) {
   async function loadTickets() {
     const data = await loadJSON('feedback-tickets.json');
     if (!data) return;
-    if (Array.isArray(data)) tickets.value = data;
-    else if (data && Array.isArray(data.tickets)) tickets.value = data.tickets;
-    else tickets.value = [];
+    const arr = Array.isArray(data) ? data : (data && Array.isArray(data.tickets) ? data.tickets : []);
+    tickets.value = arr.map(t => ({ ...t, _read: !!t._read }));
   }
+
+  loadTickets();
 
   function openFeedback() {
     feedbackDialogVisible.value = true;
