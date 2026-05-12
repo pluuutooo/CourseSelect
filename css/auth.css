@@ -1,19 +1,15 @@
 /* ===== Login Page ===== */
 .login-page { 
-  /* display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
-  background-color: #f0f2f5;
-  /* 2. 应用你下载的 Blob 转换后的本地图片 */
-  background-image: url('./background_image.png');
-  
-  /* 3. 仿照原版配置：居中并底部对齐 */
-  background-size: cover;
-  background-position: center bottom; 
-  background-repeat: no-repeat;
-
-  /* 4. 布局配置 */
   min-height: 100vh;
   display: flex;
-  flex-direction: column; /* 方便以后加页脚 */ }
+  flex-direction: column;
+  justify-content: center; /* 垂直居中 */
+  align-items: center;     /* 水平居中 */
+  background-color: #f0f2f5;
+  background-image: url('./background_image.png');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;}
 .login-card {
   width: 400px;
   background: #fff;
