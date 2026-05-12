@@ -16,6 +16,8 @@
   border-radius: 8px;
   padding: 40px 36px;
   box-shadow: 0 8px 32px rgba(0,0,0,.18);
+  justify-content: center; /* 垂直居中 */
+  align-items: center;     /* 水平居中 */  
 }
 .login-title    { text-align: center; font-size: 32px; color: #303133; margin-bottom: 4px; }
 .login-subtitle { text-align: center; color: #909399; margin-bottom: 28px; font-size: 14px; }
