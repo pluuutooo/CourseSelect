@@ -64,6 +64,14 @@ const app = createApp({
       return turn.previewBeginTime && now < selectBegin;
     }
 
+    function isRoundEnded() {
+      const turn = auth.currentTurn.value;
+      if (!turn) return false;
+      const now = timeline.mockNow.value;
+      const selectEnd = new Date(turn.endTime.replace(' ', 'T'));
+      return now >= selectEnd;
+    }
+
     function handleSelect(lesson) {
       if (isPreviewPeriod()) {
         ElMessage.warning('选课未开始');
@@ -88,6 +96,32 @@ const app = createApp({
       const details = await utils.loadJSON('course-details.json');
       if (details) {
         Object.assign(course.courseDetailsCache.value, details);
+      }
+      // If the round's selection period has ended, simulate lottery results
+      const now = timeline.mockNow.value;
+      const selectEnd = new Date(turn.endTime.replace(' ', 'T'));
+      if (now >= selectEnd) {
+        const failedIds = Object.keys(ureason.reasonData.value || {});
+        // Remove courses that "lost the lottery" (have reason data)
+        const failed = selectedLessons.value.filter(l => failedIds.includes(String(l.id)));
+        failed.forEach(l => {
+          const inAll = allLessons.value.find(a => a.id === l.id);
+          if (inAll) { inAll._selected = false; inAll.pinned = false; }
+        });
+        selectedLessons.value = selectedLessons.value.filter(l => !failedIds.includes(String(l.id)));
+        // Also remove from roundHistory so they don't carry over to next round
+        const rh = course.roundHistory[turn.roundNo];
+        if (rh) {
+          rh.selected = rh.selected.filter(l => !failedIds.includes(String(l.id)));
+          if (rh._carryOver) {
+            rh._carryOver = rh._carryOver.filter(l => !failedIds.includes(String(l.id)));
+          }
+        }
+        // Mark remaining as confirmed
+        selectedLessons.value.forEach(l => { l.pinned = true; });
+        allLessons.value.forEach(l => {
+          if (l._selected) l.pinned = true;
+        });
       }
       auth.currentPage.value = 'select';
     }
@@ -240,6 +274,8 @@ const app = createApp({
       enterTurns: auth.enterTurns,
       turnStatusText: auth.turnStatusText,
       turnStatusType: auth.turnStatusType,
+      isPreviewPeriod,
+      isRoundEnded,
 
       // Utils
       captchaCanvas: utils.captchaCanvas,

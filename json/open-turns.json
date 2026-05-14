@@ -110,44 +110,6 @@
       "lowestPeople": null,
       "capPercentage": null,
       "notNowTurnDropLimitCount": null
-    },
-    {
-      "id": 5004,
-      "name": "退课名额释放期",
-      "nameZh": "退课名额释放期",
-      "nameEn": "Drop Period - Quota Release",
-      "code": "TURN-2026-S1-DROP",
-      "semester": {
-        "id": 401,
-        "nameZh": "2025-2026学年第二学期",
-        "nameEn": "2025-2026 Spring Semester"
-      },
-      "beginTime": "2026-04-28 08:00:00",
-      "endTime": "2026-04-30 22:00:00",
-      "previewBeginTime": null,
-      "previewEndTime": null,
-      "dropBeginTime": "2026-04-28 08:00:00",
-      "dropEndTime": "2026-04-30 22:00:00",
-      "canSelect": false,
-      "canDrop": false,
-      "canPreview": false,
-      "status": "NOT_START",
-      "turnMode": {
-        "enableVirtualWallet": false,
-        "showCount": true
-      },
-      "bizTypeId": 2,
-      "roundNo": 4,
-      "bulletin": "<p>退课名额释放期，可退课和补选释放的名额。</p><p>名额每天中午12:00统一更新。</p>",
-      "rules": "",
-      "quotaReleaseTimes": [
-        "2026-04-28 12:00:00",
-        "2026-04-29 12:00:00",
-        "2026-04-30 12:00:00"
-      ],
-      "lowestPeople": null,
-      "capPercentage": null,
-      "notNowTurnDropLimitCount": null
     }
   ]
 }

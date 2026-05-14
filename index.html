@@ -287,8 +287,8 @@
           <el-button size="small" @click="setMockPreset('2026-04-09T14:00:00')">R1选课</el-button>
           <el-button size="small" @click="setMockPreset('2026-04-11T10:00:00')">R1结束</el-button>
           <el-button size="small" @click="setMockPreset('2026-04-16T11:30:00')">R2选课</el-button>
+          <el-button size="small" @click="setMockPreset('2026-04-18T10:00:00')">R2结束</el-button>
           <el-button size="small" @click="setMockPreset('2026-04-22T09:00:00')">R3选课</el-button>
-          <el-button size="small" @click="setMockPreset('2026-04-29T10:00:00')">释放期</el-button>
         </div>
       </div>
     </div>
@@ -302,7 +302,7 @@
           <span class="turn-name">{{ currentTurn?.nameZh }}</span>
         </div>
         <div class="top-right">
-          <el-button text type="primary" @click="openGuide">
+          <el-button v-if="selectOptions?.turn?.turnMode?.enableVirtualWallet" text type="primary" @click="openGuide">
             <el-icon><Compass /></el-icon> 意愿值向导
           </el-button>
           <el-badge :value="fbUnreadCount" :hidden="fbUnreadCount === 0" :max="9">
@@ -310,17 +310,14 @@
               <el-icon><chat-dot-square /></el-icon> 问题反馈
             </el-button>
           </el-badge>
-          <span v-if="selectOptions?.turn?.turnMode?.enableVirtualWallet" class="virtual-wallet">
-            意愿值: {{ virtualCost.spent }}/{{ virtualCost.total }}（剩余 <span :style="{color: vcRemaining < 0 ? '#F56C6C' : vcRemaining === 0 ? '#909399' : '#67C23A'}">{{ vcRemaining }}</span>）
-          </span>
         </div>
       </div>
 
       <div class="select-body">
         <!-- Left Sidebar -->
         <div class="sidebar">
-          <div class="sidebar-section">    
-            <h4>我的意愿值</h4>      
+          <div class="sidebar-section" v-if="selectOptions?.turn?.turnMode?.enableVirtualWallet">
+            <h4>我的意愿值</h4>
             <div class="status-item">
               <span>剩余意愿值</span>
               <el-progress :percentage="(vcRemaining/virtualCost.total)*100" :format="()=>`${vcRemaining}/${virtualCost.total}`" :stroke-width="10" :color="vcRemaining <= 0 ? '#F56C6C' : vcRemaining <= 20 ? '#E6A23C' : '#67C23A'"></el-progress>
@@ -373,7 +370,8 @@
                   <span class="pc-credits">{{ pc.course.credits }}学分</span>
                   <span class="pc-term">建议学期: {{ pc.planCourseSuggestTermsText }}</span>
                   <el-tag v-if="pc.courseSelectPassStatus === 'PASS'" type="success" size="small">已通过</el-tag>
-                  <el-tag v-else-if="pc.selectedLesson" type="success" size="small">已选中</el-tag>
+                  <el-tag v-else-if="pc.selectedLesson && pc.selectedLesson.pinned" type="success" size="small">已选中</el-tag>
+                  <el-tag v-else-if="pc.selectedLesson && !pc.selectedLesson.pinned" type="warning" size="small">待筛选</el-tag>
                   <el-tag v-else-if="pc.notInTurn" type="info" size="small">未开课</el-tag>
                   <el-tag v-else type="warning" size="small">未选</el-tag>
                   <el-button
@@ -402,7 +400,8 @@
                       <span class="pc-credits">{{ pc.course.credits }}学分</span>
                       <span class="pc-term">建议学期: {{ pc.planCourseSuggestTermsText }}</span>
                       <el-tag v-if="pc.courseSelectPassStatus === 'PASS'" type="success" size="small">已通过</el-tag>
-                      <el-tag v-else-if="pc.selectedLesson" type="success" size="small">已选中</el-tag>
+                      <el-tag v-else-if="pc.selectedLesson && pc.selectedLesson.pinned" type="success" size="small">已选中</el-tag>
+                      <el-tag v-else-if="pc.selectedLesson && !pc.selectedLesson.pinned" type="warning" size="small">待筛选</el-tag>
                       <el-tag v-else-if="pc.notInTurn" type="info" size="small">未开课</el-tag>
                       <el-tag v-else type="warning" size="small">未选</el-tag>
                       <el-button
@@ -451,7 +450,7 @@
               <el-table-column label="操作" width="120" fixed="left">
                 <template #default="{row}">
                   <el-button v-if="isSelected(row)" type="danger" size="small" text @click="handleDrop(row)">退课</el-button>
-                  <el-button v-else-if="row.stdCount >= row.limitCount" type="info" size="small" disabled>已满</el-button>
+                  <el-button v-else-if="!selectOptions?.turn?.turnMode?.enableVirtualWallet && row.stdCount >= row.limitCount" type="info" size="small" disabled>已满</el-button>
                   <el-button v-else type="primary" size="small" text @click="handleSelect(row)">选课</el-button>
                   <!-- v2: Watch button (用例2) -->
                   <el-button
@@ -475,7 +474,7 @@
                   </template>
                   <el-tag v-else-if="isSelected(row) && isPinned(row)" type="success" size="small">已选中</el-tag>
                   <el-tag v-else-if="isSelected(row) && !isPinned(row)" type="warning" size="small">待筛选</el-tag>
-                  <div v-else-if="row.stdCount >= row.limitCount">
+                  <div v-else-if="row.stdCount >= row.limitCount && (isRoundEnded() || !selectOptions?.turn?.turnMode?.enableVirtualWallet)">
                     <el-tag type="info" size="small">未选中</el-tag>
                     <el-button type="primary" size="small" text @click="openReasonDialog(row)" style="padding:2px 0">原因</el-button>
                   </div>
@@ -526,7 +525,10 @@
               </el-table-column>
               <el-table-column label="已选/上限" width="150">
                 <template #default="{row}">
-                  <div class="count-cell">
+                  <div v-if="isPreviewPeriod()" class="count-cell">
+                    <span class="text-muted">—/{{ row.limitCount }}</span>
+                  </div>
+                  <div v-else class="count-cell">
                     <span :class="{'text-danger': row.stdCount >= row.limitCount}">{{ row.stdCount }}/{{ row.limitCount }}</span>
                     <el-progress
                       :percentage="Math.min((row.stdCount/row.limitCount)*100, 100)"
@@ -596,7 +598,7 @@
                 <el-table-column label="操作" width="90" fixed="left">
                   <template #default="{row}">
                     <el-button v-if="isSelected(row)" type="danger" size="small" text @click="handleDrop(row)">退课</el-button>
-                    <el-button v-else-if="row.stdCount >= row.limitCount" type="info" size="small" disabled>已满</el-button>
+                    <el-button v-else-if="!selectOptions?.turn?.turnMode?.enableVirtualWallet && row.stdCount >= row.limitCount" type="info" size="small" disabled>已满</el-button>
                     <el-button v-else type="primary" size="small" text @click="handleSelect(row)">选课</el-button>
                   </template>
                 </el-table-column>
@@ -652,8 +654,10 @@
           <div v-if="activeTab === 'selectedLesson'" class="tab-content">
             <div class="selected-summary">
               本学期已选学分：{{ status.semesterCreditActual }}
-              <span style="margin-left:20px">意愿值已分配：{{ virtualCost.spent }}/{{ virtualCost.total }}</span>
-              <span :style="{marginLeft:'8px', color: vcRemaining < 0 ? '#F56C6C' : '#67C23A'}">剩余 {{ vcRemaining }}</span>
+              <template v-if="selectOptions?.turn?.turnMode?.enableVirtualWallet">
+                <span style="margin-left:20px">意愿值已分配：{{ virtualCost.spent }}/{{ virtualCost.total }}</span>
+                <span :style="{marginLeft:'8px', color: vcRemaining < 0 ? '#F56C6C' : '#67C23A'}">剩余 {{ vcRemaining }}</span>
+              </template>
             </div>
             <el-table :data="selectedLessons" stripe border style="width:100%">
               <el-table-column label="操作" width="80">

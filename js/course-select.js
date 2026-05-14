@@ -20,6 +20,9 @@ function useCourseSelect(loadJSON, allLessons, selectedLessons, status) {
   // Tracks preserved codes that were dropped by user; if dropped, future selects should not be auto-preserved
   const droppedPreserved = new Set();
 
+  // Per-round history: tracks selections and drops for carry-over computation
+  const roundHistory = reactive({});
+
   function isCorePreserve(code) { return preserveCodes.has(code); }
   function markDroppedPreserve(code) { droppedPreserved.add(code); }
 
@@ -179,9 +182,20 @@ function useCourseSelect(loadJSON, allLessons, selectedLessons, status) {
   }
 
   function handleSelect(lesson) {
-    selectTarget.value = lesson;
-    selectVcInput.value = 0;
-    selectDialogVisible.value = true;
+    const turn = selectOptions.value?.turn;
+    const isRushMode = turn && !turn.turnMode?.enableVirtualWallet;
+
+    if (isRushMode) {
+      if (lesson.stdCount >= lesson.limitCount) {
+        ElMessage.warning('该教学班已满，无法选课');
+        return;
+      }
+      _doRushSelect(lesson);
+    } else {
+      selectTarget.value = lesson;
+      selectVcInput.value = 0;
+      selectDialogVisible.value = true;
+    }
   }
 
   function confirmSelect() {
@@ -209,10 +223,6 @@ function useCourseSelect(loadJSON, allLessons, selectedLessons, status) {
     resultMessage.value = '';
 
     setTimeout(() => {
-      if (lesson.stdCount >= lesson.limitCount) {
-        resultLoading.value = false; resultSuccess.value = false;
-        resultMessage.value = '该教学班已满，无法选课'; return;
-      }
       if (status.semesterCreditActual + lesson.course.credits > status.semesterCreditUpperLimit) {
         resultLoading.value = false; resultSuccess.value = false;
         resultMessage.value = '选课学分已达上限'; return;
@@ -229,20 +239,76 @@ function useCourseSelect(loadJSON, allLessons, selectedLessons, status) {
       resultLoading.value = false;
       resultSuccess.value = true;
       resultMessage.value = '选课成功';
-      const code = lesson.course?.code;
-      const preserve = isCorePreserve(code) && !droppedPreserved.has(code);
-      const newLesson = { ...lesson, pinned: !!preserve, _selected: true, _initialPreserved: !!preserve };
+      const newLesson = { ...lesson, pinned: false, _selected: true, _initialPreserved: false };
       selectedLessons.value.push(newLesson);
       lesson.stdCount++;
       lesson._selected = true;
-      lesson.pinned = !!preserve;
+      lesson.pinned = false;
       status.semesterCreditActual += lesson.course.credits;
       status.semesterAmountActual += 1;
       setVcAllocation(lesson.id, vcInput);
       syncPlanCourseStatus();
-      // v2: set submit status with countdown (HTA 4.3-4.4)
       setSubmitStatus(lesson.id, 'success');
+
+      const currentRound = selectOptions.value?.turn?.roundNo;
+      if (currentRound && roundHistory[currentRound]) {
+        roundHistory[currentRound].selected.push(newLesson);
+      }
     }, 1500);
+  }
+
+  function _doRushSelect(lesson) {
+    const conflict = checkTimeConflict(lesson);
+    if (conflict) {
+      conflictTarget.value = lesson;
+      conflictWith.value = conflict;
+      conflictDialogVisible.value = true;
+      selectTarget.value = lesson;
+      selectVcInput.value = 0;
+      return;
+    }
+    _doRushSelectCore(lesson);
+  }
+
+  function _doRushSelectCore(lesson) {
+    resultDialogVisible.value = true;
+    resultLoading.value = true;
+    resultSuccess.value = false;
+    resultMessage.value = '';
+
+    setTimeout(() => {
+      if (lesson.stdCount >= lesson.limitCount) {
+        resultLoading.value = false; resultSuccess.value = false;
+        resultMessage.value = '该教学班已满，无法选课'; return;
+      }
+      if (status.semesterCreditActual + lesson.course.credits > status.semesterCreditUpperLimit) {
+        resultLoading.value = false; resultSuccess.value = false;
+        resultMessage.value = '选课学分已达上限'; return;
+      }
+      if (status.semesterAmountActual + 1 > status.semesterAmountUpperLimit) {
+        resultLoading.value = false; resultSuccess.value = false;
+        resultMessage.value = '选课门数已达上限'; return;
+      }
+
+      resultLoading.value = false;
+      resultSuccess.value = true;
+      resultMessage.value = '选课成功（先到先得）';
+
+      const newLesson = { ...lesson, pinned: true, _selected: true, _initialPreserved: false };
+      selectedLessons.value.push(newLesson);
+      lesson.stdCount++;
+      lesson._selected = true;
+      lesson.pinned = true;
+      status.semesterCreditActual += lesson.course.credits;
+      status.semesterAmountActual += 1;
+      syncPlanCourseStatus();
+      setSubmitStatus(lesson.id, 'success');
+
+      const currentRound = selectOptions.value?.turn?.roundNo;
+      if (currentRound && roundHistory[currentRound]) {
+        roundHistory[currentRound].selected.push(newLesson);
+      }
+    }, 800);
   }
 
   function handleDrop(lesson) {
@@ -265,7 +331,6 @@ function useCourseSelect(loadJSON, allLessons, selectedLessons, status) {
       resultLoading.value = false;
       resultSuccess.value = true;
       resultMessage.value = '退课成功';
-      // If this was an initially preserved core course, mark it as dropped so future selections won't auto-preserve
       const removed = selectedLessons.value.find(l => l.id === lesson.id);
       const code = removed?.course?.code || lesson.course?.code;
       if (removed && removed._initialPreserved && isCorePreserve(code)) {
@@ -283,6 +348,11 @@ function useCourseSelect(loadJSON, allLessons, selectedLessons, status) {
         if (inAll.stdCount > 0) inAll.stdCount--;
       }
       syncPlanCourseStatus();
+
+      const currentRound = selectOptions.value?.turn?.roundNo;
+      if (currentRound && roundHistory[currentRound]) {
+        roundHistory[currentRound].dropped.push(removed || lesson);
+      }
     }, 1200);
   }
 
@@ -404,7 +474,15 @@ function useCourseSelect(loadJSON, allLessons, selectedLessons, status) {
   function showConflictAndProceed() {
     conflictDialogVisible.value = false;
     const lesson = conflictTarget.value;
-    if (lesson) _doSelect(lesson, selectVcInput.value || 0);
+    if (!lesson) return;
+
+    const turn = selectOptions.value?.turn;
+    const isRushMode = turn && !turn.turnMode?.enableVirtualWallet;
+    if (isRushMode) {
+      _doRushSelectCore(lesson);
+    } else {
+      _doSelect(lesson, selectVcInput.value || 0);
+    }
   }
 
   function showConflictAlternatives() {
@@ -487,15 +565,16 @@ function useCourseSelect(loadJSON, allLessons, selectedLessons, status) {
       else { l._selected = false; }
     });
 
-    // Mark initial-preserved core courses when entering selection page
+    const currentRound = selectOptions.value?.turn?.roundNo;
     selectedLessons.value = selectedLessons.value.map(s => {
       const code = s.course?.code;
-      if (isCorePreserve(code) && !droppedPreserved.has(code)) {
+      if (currentRound === 1) {
+        s._initialPreserved = false;
+      } else if (isCorePreserve(code) && !droppedPreserved.has(code)) {
         s._initialPreserved = true;
-        s.pinned = true; // show as selected initially
+        s.pinned = true;
       } else {
         s._initialPreserved = false;
-        // keep pinned as-is for other selections
       }
       return s;
     });
@@ -522,10 +601,9 @@ function useCourseSelect(loadJSON, allLessons, selectedLessons, status) {
 
   async function enterSelect(turn, currentTurnRef) {
     currentTurnRef.value = turn;
-    const [opts, lessons, selected, plan, comp, stat, vc, qc] = await Promise.all([
+    const [opts, lessons, plan, comp, stat, vc, qc] = await Promise.all([
       loadJSON('select-options.json'),
       loadJSON('query-lesson.json'),
-      loadJSON('selected-lessons.json'),
       loadJSON('major-plan.json'),
       loadJSON('program-completion.json'),
       loadJSON('status.json'),
@@ -534,8 +612,53 @@ function useCourseSelect(loadJSON, allLessons, selectedLessons, status) {
     ]);
 
     selectOptions.value = opts;
+    // Override turn info with the actual turn being entered
+    if (selectOptions.value) {
+      selectOptions.value.turn = { ...(selectOptions.value.turn || {}), ...turn };
+    }
+
     if (lessons) allLessons.value = lessons.lessons || [];
-    if (selected) selectedLessons.value = selected;
+
+    // Round-specific pre-loaded courses
+    const roundNo = turn.roundNo;
+    if (!roundHistory[roundNo]) {
+      roundHistory[roundNo] = { selected: [], dropped: [], _carryOver: [] };
+    }
+
+    if (roundNo === 1) {
+      // Round 1: start empty, but restore if re-entering with existing history
+      const history = roundHistory[1];
+      const restored = [...history.selected]
+        .filter(l => !history.dropped.some(d => d.id === l.id));
+      selectedLessons.value = restored.map(l => ({ ...l, pinned: false, _selected: true, _initialPreserved: false }));
+    } else {
+      const prevRound = roundNo - 1;
+      const prevHistory = roundHistory[prevRound] || { selected: [], dropped: [], _carryOver: [] };
+      const prevCarryOver = prevHistory._carryOver || [];
+      const carryOver = [...prevCarryOver, ...prevHistory.selected]
+        .filter(l => !prevHistory.dropped.some(d => d.id === l.id));
+      // Deduplicate by id
+      const seen = new Set();
+      const uniqueCarryOver = carryOver.filter(l => {
+        if (seen.has(l.id)) return false;
+        seen.add(l.id);
+        return true;
+      });
+
+      // Carry-over courses are pinned (confirmed from previous round)
+      const carryOverLessons = uniqueCarryOver.map(l => ({ ...l, pinned: true, _initialPreserved: true }));
+
+      // Also restore any selections made in this round (if re-entering)
+      const thisHistory = roundHistory[roundNo];
+      const thisRoundSelected = thisHistory.selected
+        .filter(l => !thisHistory.dropped.some(d => d.id === l.id))
+        .filter(l => !uniqueCarryOver.some(c => c.id === l.id));
+      const thisRoundLessons = thisRoundSelected.map(l => ({ ...l, pinned: false, _selected: true, _initialPreserved: false }));
+
+      selectedLessons.value = [...carryOverLessons, ...thisRoundLessons];
+      roundHistory[roundNo]._carryOver = uniqueCarryOver;
+    }
+
     if (plan?.modules) {
       majorPlanModules.value = plan.modules.map(m => ({
         ...m, _expanded: true,
@@ -544,7 +667,18 @@ function useCourseSelect(loadJSON, allLessons, selectedLessons, status) {
     }
     if (comp?.modules) programCompletion.value = comp.modules;
     if (stat) Object.assign(status, stat);
-    if (vc) { virtualCost.total = vc.virtualCostTotal; virtualCost.spent = vc.virtualCostSpent; }
+    // Recalculate credit/amount based on actual selectedLessons
+    status.semesterCreditActual = selectedLessons.value.reduce((s, l) => s + (l.course?.credits || 0), 0);
+    status.semesterAmountActual = selectedLessons.value.length;
+    if (vc && turn.turnMode?.enableVirtualWallet) {
+      virtualCost.total = vc.virtualCostTotal;
+      virtualCost.spent = 0;
+    } else {
+      virtualCost.total = 100;
+      virtualCost.spent = 0;
+    }
+    // Reset VC allocations for this round
+    Object.keys(vcAllocation).forEach(k => delete vcAllocation[k]);
     if (qc) {
       queryCondition.campuses = qc.campuses || [];
       queryCondition.departments = qc.departments || [];
@@ -585,6 +719,7 @@ function useCourseSelect(loadJSON, allLessons, selectedLessons, status) {
     // Expose preserve-related helpers for other modules (app.js uses these)
     preserveCodes, droppedPreserved, isCorePreserve, markDroppedPreserve,
     vcAllocation, getVcAllocation, setVcAllocation, vcRemaining,
+    roundHistory,
     // v2: new features
     detailDrawerVisible, detailDrawerLesson, detailDrawerCourseInfo, courseDetailsCache,
     openDetailDrawer, closeDetailDrawer, getHeatLevel,
